@@ -6,38 +6,167 @@
     <title>新完全掌握日语能力考试资料</title>
     <link rel="stylesheet" href="css/styles.css" />
     <style>
-      /* 为 index.html 添加一些简单样式 */
       body {
-        padding: 2em;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        min-height: 100vh; /* 确保 body 至少和视口一样高 */
       }
-      nav ul {
+
+      .top-nav {
+        background-color: #f8f9fa;
+        padding: 0.5em 2em;
+        border-bottom: 1px solid #dee2e6;
+        position: sticky; /* 固定导航栏 */
+        top: 0;
+        z-index: 1000; /* 确保在最上层 */
+      }
+
+      .top-nav ul {
         list-style: none;
         padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 1.5em; /* 导航项间距 */
       }
-      nav li {
-        margin-bottom: 1em;
-      }
-      nav a {
+
+      .top-nav a {
         text-decoration: none;
-        font-size: 1.2em;
+        color: #0d6efd;
+        font-size: 1.1em;
+        padding: 0.5em 0;
+        display: inline-block;
       }
-      nav a:hover {
-        text-decoration: underline;
+
+      .top-nav a:hover,
+      .top-nav a.active {
+        color: #0a58ca;
+        border-bottom: 2px solid #0a58ca; /* 活动状态指示 */
+      }
+
+      .main-container {
+        display: flex;
+        flex-grow: 1; /* 让容器填充剩余空间 */
+        padding: 1em 2em; /* 主区域内边距 */
+        position: relative; /* 为了 TOC 定位 */
+      }
+
+      #content-area {
+        flex-grow: 1; /* 内容区域占据大部分空间 */
+        margin-right: 220px; /* 为右侧 TOC 留出空间 */
+        /* 添加原始文件中的 h1, h2 样式可能更好 */
+      }
+      #content-area h1,
+      #content-area h2 {
+        /* 根据需要从 styles.css 或原始文件复制样式 */
+        /* 示例 */
+        margin-top: 1.5em;
+        margin-bottom: 0.8em;
+        font-weight: bold;
+      }
+      #content-area h1 {
+        font-size: 2em;
+      }
+      #content-area h2 {
+        font-size: 1.5em;
+      }
+
+      #toc {
+        position: fixed; /* 固定位置 */
+        right: 2em; /* 距离右边 */
+        top: 60px; /* 避开顶部导航栏，根据导航栏实际高度调整 */
+        width: 200px; /* TOC 宽度 */
+        max-height: calc(100vh - 80px); /* 最大高度，防止遮挡底部 */
+        overflow-y: auto; /* 内容过多时滚动 */
+        padding-left: 1em;
+        border-left: 1px solid #eee; /* 左侧分隔线 */
+        font-size: 0.9em;
+      }
+
+      #toc ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      #toc li a {
+        text-decoration: none;
+        color: #495057;
+        display: block; /* 让链接占满整行 */
+        padding: 0.3em 0;
+        white-space: nowrap; /* 防止换行 */
+        overflow: hidden;
+        text-overflow: ellipsis; /* 超出部分显示省略号 */
+      }
+
+      #toc li a:hover {
+        color: #007bff;
+        background-color: #f8f9fa;
+      }
+
+      /* 响应式：在小屏幕上隐藏 TOC */
+      @media (max-width: 992px) {
+        #content-area {
+          margin-right: 0;
+        }
+        #toc {
+          display: none;
+        }
+      }
+
+      /* 表格样式（可能需要从 styles.css 调整或合并） */
+      #content-area table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2em;
+        font-size: 0.95em;
+      }
+      #content-area caption {
+        font-weight: bold;
+        font-size: 1.2em;
+        margin-bottom: 0.5em;
+        text-align: left;
+        padding-top: 1em; /* 让 TOC 跳转后标题可见 */
+      }
+      #content-area th,
+      #content-area td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      #content-area thead {
+        background-color: #f2f2f2;
+      }
+      #content-area button {
+        margin-left: 10px;
+        padding: 2px 5px;
+        cursor: pointer;
+        vertical-align: middle; /* 让按钮和标题对齐 */
       }
     </style>
   </head>
   <body>
-    <h1>新完全掌握日语能力考试资料</h1>
-    <nav>
+    <nav class="top-nav">
       <ul>
-        <li><a href="新完全掌握日语能力考试 N1级 汉字.html">N1级 汉字</a></li>
-        <!-- 未来可以添加更多链接 -->
-        <!-- <li><a href="n1_vocab.html">N1级 词汇</a></li> -->
-        <!-- <li><a href="n2_kanji.html">N2级 汉字</a></li> -->
+        <li><a href="#" data-content-type="n1-kanji" class="active">N1级 汉字</a></li>
+        <!-- <li><a href="#" data-content-type="n1-grammar">N1级 语法</a></li> -->
+        <!-- <li><a href="#" data-content-type="n2-vocab">N2级 词汇</a></li> -->
       </ul>
     </nav>
 
+    <div class="main-container">
+      <main id="content-area" class="document-wrapper">
+        <!-- 内容将动态加载到这里 -->
+        <h1>请稍候，正在加载内容...</h1>
+      </main>
+      <aside id="toc">
+        <h4>目录</h4>
+        <ul>
+          <!-- TOC 将动态生成到这里 -->
+        </ul>
+      </aside>
+    </div>
+
     <script src="js/script.js"></script>
-    <!-- 如果 index 也需要脚本功能 -->
   </body>
 </html>
