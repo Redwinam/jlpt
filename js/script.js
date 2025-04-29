@@ -36,10 +36,38 @@ const contentData = {
               { name: "動詞Bレベル (3)", id: "s1-g3-i3", file: "3-3", page: "17" },
             ],
           },
-          { title: "第4回", items: [{ name: "動詞Bレベル", id: "s1-g4-i1", file: "4-1", page: "21-23" }] },
-          { title: "第5回", items: [{ name: "動詞Cレベル", id: "s1-g5-i1", file: "5-1", page: "27-29" }] },
-          { title: "第6回", items: [{ name: "動詞Cレベル", id: "s1-g6-i1", file: "6-1", page: "33-35" }] },
-          { title: "第7回", items: [{ name: "い形容詞", id: "s1-g7-i1", file: "7-1", page: "38-39" }] },
+          {
+            title: "第4回",
+            items: [
+              { name: "動詞Bレベル (1)", id: "s1-g4-i1", file: "4-1", page: "21" },
+              { name: "動詞Bレベル (2)", id: "s1-g4-i2", file: "4-2", page: "22" },
+              { name: "動詞Bレベル (3)", id: "s1-g4-i3", file: "4-3", page: "23" },
+            ],
+          },
+          {
+            title: "第5回",
+            items: [
+              { name: "動詞Cレベル (1)", id: "s1-g5-i1", file: "5-1", page: "27" },
+              { name: "動詞Cレベル (2)", id: "s1-g5-i2", file: "5-2", page: "28" },
+              { name: "動詞Cレベル (3)", id: "s1-g5-i3", file: "5-3", page: "29" },
+            ],
+          },
+          {
+            title: "第6回",
+            items: [
+              { name: "動詞Cレベル (1)", id: "s1-g6-i1", file: "6-1", page: "33" },
+              { name: "動詞Cレベル (2)", id: "s1-g6-i2", file: "6-2", page: "34" },
+              { name: "動詞Cレベル (3)", id: "s1-g6-i3", file: "6-3", page: "35" },
+            ],
+          },
+          {
+            title: "第7回",
+            items: [
+              { name: "い形容詞 (1)", id: "s1-g7-i1-1", file: "7-1-1", page: "38" },
+              { name: "い形容詞 (1)", id: "s1-g7-i1-2", file: "7-1-2", page: "38" },
+              { name: "い形容詞 (2)", id: "s1-g7-i2", file: "7-2", page: "39" },
+            ],
+          },
           {
             title: "第8回",
             items: [
