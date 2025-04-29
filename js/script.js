@@ -39,6 +39,11 @@ function copyTableColumns(captionId) {
     return;
   }
 
+  // 获取 caption 的文本内容 (第一个文本节点，避免获取按钮文字)
+  const captionTitleRaw = captionElement.firstChild?.textContent?.trim() || "未知标题";
+  const captionTitleProcessed = captionTitleRaw.replace(/\u3000/g, "\n"); // 将全角空格替换为换行符
+  let textToCopy = captionTitleProcessed + "\n\n"; // 使用处理后的标题初始化，并添加换行
+
   let tableElement = captionElement.closest("table");
   if (!tableElement) {
     tableElement = captionElement.parentElement.tagName === "TABLE" ? captionElement.parentElement : null;
@@ -55,7 +60,6 @@ function copyTableColumns(captionId) {
     return;
   }
 
-  let textToCopy = "";
   const rows = tbody.querySelectorAll("tr");
 
   rows.forEach((row) => {
@@ -68,6 +72,7 @@ function copyTableColumns(captionId) {
         cell4Text += "。";
       }
       if (cell3Text || cell4Text) {
+        // 将单元格内容追加到标题后面
         textToCopy += cell3Text + "\n" + cell4Text + "\n\n";
       }
     } else {
