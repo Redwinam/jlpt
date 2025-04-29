@@ -19,7 +19,15 @@ const contentData = {
               { name: "動詞Aレベル (3)", id: "s1-g1-i3", file: "1-3", page: "5" },
             ],
           },
-          { title: "第2回", items: [{ name: "動詞Aレベル", id: "s1-g2-i1", file: "2-1", page: "8-11" }] },
+          {
+            title: "第2回",
+            items: [
+              { name: "動詞Aレベル (1)", id: "s1-g2-i1", file: "2-1", page: "8" },
+              { name: "動詞Aレベル (2)", id: "s1-g2-i2", file: "2-2", page: "9" },
+              { name: "動詞Aレベル (3)", id: "s1-g2-i3", file: "2-3", page: "10" },
+              { name: "動詞Aレベル (4)", id: "s1-g2-i4", file: "2-4", page: "11" },
+            ],
+          },
           { title: "第3回", items: [{ name: "動詞Bレベル", id: "s1-g3-i1", file: "3-1", page: "15-17" }] },
           { title: "第4回", items: [{ name: "動詞Bレベル", id: "s1-g4-i1", file: "4-1", page: "21-23" }] },
           { title: "第5回", items: [{ name: "動詞Cレベル", id: "s1-g5-i1", file: "5-1", page: "27-29" }] },
