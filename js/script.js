@@ -11,24 +11,24 @@ const contentData = {
       {
         title: "第1部　訓読み",
         fragments: [
-          { id: "第1回　動詞Aレベル" },
-          { id: "第2回　動詞Aレベル" },
-          { id: "第3回　動詞Bレベル" },
-          { id: "第4回　動詞Bレベル" },
-          { id: "第5回　動詞Cレベル" },
-          { id: "第6回　動詞Cレベル" },
-          { id: "第7回　い形容詞" },
-          { id: "第8回　な形容詞" },
-          { id: "第8回　副詞・その他" },
-          { id: "第9回　名詞 (1) 道具" },
-          { id: "第9回　名詞 (2) 人・衣服" },
-          { id: "第9回　名詞 (3) 身体・感情" },
-          { id: "第10回　名詞 (4) 自然" },
-          { id: "第10回　名詞 (5) 植物・食物" },
-          { id: "第10回　名詞 (6) 建造物・形状" },
-          { id: "第11回　名詞 (7) 野生・生活" },
-          { id: "第11回　名詞 (8) 経済・生活" },
-          { id: "第11回　名詞 (9) 時・空間" },
+          { id: "第1回　動詞Aレベル", page: "3-5" },
+          { id: "第2回　動詞Aレベル", page: "8-11" },
+          { id: "第3回　動詞Bレベル", page: "15-17" },
+          { id: "第4回　動詞Bレベル", page: "21-23" },
+          { id: "第5回　動詞Cレベル", page: "27-29" },
+          { id: "第6回　動詞Cレベル", page: "33-35" },
+          { id: "第7回　い形容詞", page: "38-39" },
+          { id: "第8回　な形容詞", page: "42" },
+          { id: "第8回　副詞・その他", page: "43" },
+          { id: "第9回　名詞 (1) 道具", page: "46" },
+          { id: "第9回　名詞 (2) 人・衣服", page: "47" },
+          { id: "第9回　名詞 (3) 身体・感情", page: "48" },
+          { id: "第10回　名詞 (4) 自然", page: "51" },
+          { id: "第10回　名詞 (5) 植物・食物", page: "52" },
+          { id: "第10回　名詞 (6) 建造物・形状", page: "53" },
+          { id: "第11回　名詞 (7) 野生・生活", page: "55" },
+          { id: "第11回　名詞 (8) 経済・生活", page: "56" },
+          { id: "第11回　名詞 (9) 時・空間", page: "57" },
         ],
       },
     ],
@@ -244,15 +244,29 @@ document.addEventListener("DOMContentLoaded", () => {
       fragmentsInSection.forEach((result) => {
         if (result.success) {
           const caption = document.getElementById(result.id);
-          if (caption && caption.tagName === "CAPTION") {
-            const button = document.createElement("button");
-            button.textContent = "复制读音和例句";
-            button.classList.add("copy-button");
-            button.onclick = () => copyTableColumns(result.id);
-            caption.appendChild(button);
-            caption.style.position = "relative";
+          // --- 修改开始 ---
+          // Find the original fragment object to get the 'page' property
+          const originalFragment = allFragments.find((f) => f.id === result.id);
+
+          if (caption && caption.tagName === "CAPTION" && originalFragment) {
+            const pageInfo = originalFragment.page; // Get the page string
+
+            const pageSpan = document.createElement("span");
+            pageSpan.textContent = ` P${pageInfo}`; // Display page info
+            pageSpan.classList.add("page-info-span"); // Add class for styling
+            // Apply styles directly for simplicity, or use CSS with the class
+            pageSpan.style.color = "var(--base-text-secondary-color, #888888)";
+            pageSpan.style.fontSize = "0.9rem"; // Add space from caption text
+            pageSpan.style.cursor = "pointer"; // Indicate clickability
+            pageSpan.style.fontWeight = "normal"; // Ensure it's not bold like a button might be
+
+            pageSpan.onclick = () => copyTableColumns(result.id); // Keep the copy function
+
+            caption.appendChild(pageSpan);
+            // caption.style.position = "relative"; // Maybe not necessary for span
+            // --- 修改结束 ---
           } else if (caption) {
-            console.warn(`Found element with id ${result.id}, but it's not a caption.`);
+            console.warn(`Found element with id ${result.id}, but it's not a caption or fragment data missing.`);
           }
         }
       });
