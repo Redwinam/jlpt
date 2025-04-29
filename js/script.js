@@ -72,7 +72,7 @@ function copyTableColumns(captionId) {
     if (cells.length >= 4) {
       const cell3Text = cells[2].textContent.trim();
       let cell4Text = cells[3].textContent.trim();
-      cell4Text = cell4Text.replace(/（[自他]）[。]?/g, "").trim();
+      cell4Text = cell4Text.replace(/（[自他]）[。]?/g, "\n").trim();
       if (cell4Text && !cell4Text.endsWith("。")) {
         cell4Text += "。";
       }
