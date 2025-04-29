@@ -20,10 +20,12 @@ const contentData = {
           { id: "第7回　い形容詞" },
           { id: "第8回　な形容詞" },
           { id: "第8回　副詞・その他" },
-          { id: "第9回　名詞　(1) 道具" },
-          { id: "第9回　名詞　(2) 人・衣服" },
-          { id: "第9回　名詞　(3) 身体・感情" },
-          { id: "第10回　名詞　(4) 自然　(5) 植物・食物　(6) 建造物・形状" },
+          { id: "第9回　名詞 (1) 道具" },
+          { id: "第9回　名詞 (2) 人・衣服" },
+          { id: "第9回　名詞 (3) 身体・感情" },
+          { id: "第10回　名詞 (4) 自然" },
+          { id: "第10回　名詞 (5) 植物・食物" },
+          { id: "第10回　名詞 (6) 建造物・形状" },
           { id: "第11回　名詞　(7) 野生・生活　(8) 経済・生活　(9) 時・空間" },
         ],
       },
@@ -82,6 +84,9 @@ function copyTableColumns(captionId) {
   });
 
   textToCopy = textToCopy.trim();
+
+  // 将所有全角斜杠替换为换行符
+  textToCopy = textToCopy.replace(/／/g, "\n");
 
   if (textToCopy) {
     navigator.clipboard
