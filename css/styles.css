@@ -606,5 +606,9 @@ span.highlighted.purple {
 }
 
 .document-wrapper table td:nth-child(5) {
-  width: 24em;
+  width: 25em;
+}
+
+.document-wrapper table td:nth-child(5) b {
+  color: var(--document-accent-color);
 }
