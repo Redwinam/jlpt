@@ -30,12 +30,12 @@ body {
   --document-marker-color: var(--base-text-tertiary-color);
   --document-selection-color: var(--base-selection-color);
   --document-selection-inactive-color: var(--base-background-tertiary-color);
-  --document-text-font: "AvenirNext-Regular";
+  --document-text-font: "AvenirNext-Regular", sans-serif;
   --document-text-size: 15px;
   --document-line-height-multiplier: calc(1.5 * var(--transform-line-height-factor));
 
   --document-headers-text-color: var(--base-text-color);
-  --document-headers-font: "AvenirNext-Medium";
+  --document-headers-font: "AvenirNext-Medium", sans-serif;
   --document-headers-modular-scale: 1.125;
   --document-headers-line-height-multiplier: calc(1.3 * var(--transform-line-height-factor));
   --document-headers-add-top-bottom-padding: 1;
@@ -45,7 +45,7 @@ body {
   --document-code-text-color: var(--base-text-color);
   --document-code-border-color: var(--base-text-tertiary-color);
   --document-code-background-color: var(--base-background-secondary-color);
-  --document-code-font: "Menlo-Regular";
+  --document-code-font: "Menlo-Regular", sans-serif;
   --document-code-text-size-multiplier: 0.91em;
 
   --document-code-syntax-highlight-comment: #65798c;
@@ -102,8 +102,6 @@ body {
   border-bottom: calc(2 * var(--document-hairline-width)) solid var(--document-separator-border-color);
   padding-bottom: 0.6em;
 }
-.document-wrapper blockquote blockquote blockquote blockquote blockquote::before,
-.document-wrapper blockquote blockquote blockquote::before,
 .document-wrapper blockquote::before {
   background-color: var(--document-list-marker-color);
 }
@@ -578,4 +576,11 @@ span.highlighted.purple {
 }
 .document-wrapper .todo-checkbox.todo-checked svg #check {
   opacity: 0.4;
+}
+.document-wrapper tbody tr td:nth-child(3) {
+  font-weight: 500;
+  color: var(--document-list-marker-color);
+} 
+.document-wrapper tbody tr td:nth-child(2) {
+  font-weight: 600;
 } 
