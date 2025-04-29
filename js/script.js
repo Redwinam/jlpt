@@ -2,10 +2,10 @@
 const contentData = {
   "n1-kanji": {
     navTitle: "N1级 汉字",
-    level: "N1级", // <--- 新增 level
-    category: "汉字", // <--- 新增 category
-    levelColor: "purple", // <--- (可选) 等级颜色
-    categoryColor: "red", // <--- (可选) 类别颜色
+    level: "N1级",
+    category: "汉字",
+    levelColor: "purple",
+    categoryColor: "red",
     basePath: "N1 - 汉字/",
     sections: [
       {
@@ -19,41 +19,41 @@ const contentData = {
               { name: "動詞Aレベル (3)", id: "s1-g1-i3", file: "1-3", page: "5" },
             ],
           },
-          { title: "第2回", items: [{ name: "動詞Aレベル", id: "s1-g2-i1", file: "2-1", page: "8-11", originalId: "第2回　動詞Aレベル" }] },
-          { title: "第3回", items: [{ name: "動詞Bレベル", id: "s1-g3-i1", file: "3-1", page: "15-17", originalId: "第3回　動詞Bレベル" }] },
-          { title: "第4回", items: [{ name: "動詞Bレベル", id: "s1-g4-i1", file: "4-1", page: "21-23", originalId: "第4回　動詞Bレベル" }] },
-          { title: "第5回", items: [{ name: "動詞Cレベル", id: "s1-g5-i1", file: "5-1", page: "27-29", originalId: "第5回　動詞Cレベル" }] },
-          { title: "第6回", items: [{ name: "動詞Cレベル", id: "s1-g6-i1", file: "6-1", page: "33-35", originalId: "第6回　動詞Cレベル" }] },
-          { title: "第7回", items: [{ name: "い形容詞", id: "s1-g7-i1", file: "7-1", page: "38-39", originalId: "第7回　い形容詞" }] },
+          { title: "第2回", items: [{ name: "動詞Aレベル", id: "s1-g2-i1", file: "2-1", page: "8-11" }] },
+          { title: "第3回", items: [{ name: "動詞Bレベル", id: "s1-g3-i1", file: "3-1", page: "15-17" }] },
+          { title: "第4回", items: [{ name: "動詞Bレベル", id: "s1-g4-i1", file: "4-1", page: "21-23" }] },
+          { title: "第5回", items: [{ name: "動詞Cレベル", id: "s1-g5-i1", file: "5-1", page: "27-29" }] },
+          { title: "第6回", items: [{ name: "動詞Cレベル", id: "s1-g6-i1", file: "6-1", page: "33-35" }] },
+          { title: "第7回", items: [{ name: "い形容詞", id: "s1-g7-i1", file: "7-1", page: "38-39" }] },
           {
             title: "第8回",
             items: [
-              { name: "な形容詞", id: "s1-g8-i1", file: "8-1", page: "42", originalId: "第8回　な形容詞" },
-              { name: "副詞・その他", id: "s1-g8-i2", file: "8-2", page: "43", originalId: "第8回　副詞・その他" },
+              { name: "な形容詞", id: "s1-g8-i1", file: "8-1", page: "42" },
+              { name: "副詞・その他", id: "s1-g8-i2", file: "8-2", page: "43" },
             ],
           },
           {
             title: "第9回",
             items: [
-              { name: "名詞 (1) 道具", id: "s1-g9-i1", file: "9-1", page: "46", originalId: "第9回　名詞 (1) 道具" },
-              { name: "名詞 (2) 人・衣服", id: "s1-g9-i2", file: "9-2", page: "47", originalId: "第9回　名詞 (2) 人・衣服" },
-              { name: "名詞 (3) 身体・感情", id: "s1-g9-i3", file: "9-3", page: "48", originalId: "第9回　名詞 (3) 身体・感情" },
+              { name: "名詞 (1) 道具", id: "s1-g9-i1", file: "9-1", page: "46" },
+              { name: "名詞 (2) 人・衣服", id: "s1-g9-i2", file: "9-2", page: "47" },
+              { name: "名詞 (3) 身体・感情", id: "s1-g9-i3", file: "9-3", page: "48" },
             ],
           },
           {
             title: "第10回",
             items: [
-              { name: "名詞 (4) 自然", id: "s1-g10-i1", file: "10-1", page: "51", originalId: "第10回　名詞 (4) 自然" },
-              { name: "名詞 (5) 植物・食物", id: "s1-g10-i2", file: "10-2", page: "52", originalId: "第10回　名詞 (5) 植物・食物" },
-              { name: "名詞 (6) 建造物・形状", id: "s1-g10-i3", file: "10-3", page: "53", originalId: "第10回　名詞 (6) 建造物・形状" },
+              { name: "名詞 (4) 自然", id: "s1-g10-i1", file: "10-1", page: "51" },
+              { name: "名詞 (5) 植物・食物", id: "s1-g10-i2", file: "10-2", page: "52" },
+              { name: "名詞 (6) 建造物・形状", id: "s1-g10-i3", file: "10-3", page: "53" },
             ],
           },
           {
             title: "第11回",
             items: [
-              { name: "名詞 (7) 野生・生活", id: "s1-g11-i1", file: "11-1", page: "55", originalId: "第11回　名詞 (7) 野生・生活" },
-              { name: "名詞 (8) 経済・生活", id: "s1-g11-i2", file: "11-2", page: "56", originalId: "第11回　名詞 (8) 経済・生活" },
-              { name: "名詞 (9) 時・空間", id: "s1-g11-i3", file: "11-3", page: "57", originalId: "第11回　名詞 (9) 時・空間" },
+              { name: "名詞 (7) 野生・生活", id: "s1-g11-i1", file: "11-1", page: "55" },
+              { name: "名詞 (8) 経済・生活", id: "s1-g11-i2", file: "11-2", page: "56" },
+              { name: "名詞 (9) 時・空間", id: "s1-g11-i3", file: "11-3", page: "57" },
             ],
           },
         ],
@@ -296,15 +296,16 @@ document.addEventListener("DOMContentLoaded", () => {
       if (itemContainer) {
         itemContainer.innerHTML = result.html;
 
-        // --- 修改: 使用 item.originalId 查找 caption 并添加页码/按钮 ---
+        // --- 修改: 使用 item.id 查找 caption 并添加页码/按钮 ---
         if (result.success) {
-          // Find the caption using the ORIGINAL ID stored in the item object
-          const caption = itemContainer.querySelector(`#${CSS.escape(result.item.originalId)}`);
+          // Find the caption using the NEW item ID
+          // Assumes the caption element's ID in the HTML has been updated to item.id
+          const caption = itemContainer.querySelector(`#${CSS.escape(result.item.id)}`);
 
           if (caption && caption.tagName === "CAPTION") {
             const pageInfo = result.item.page; // Get page from item
 
-            // Check if span already exists to prevent duplicates on potential re-renders
+            // Check if span already exists to prevent duplicates
             if (!caption.querySelector(".page-info-span")) {
               const pageSpan = document.createElement("span");
               pageSpan.textContent = ` P${pageInfo}`;
@@ -313,19 +314,19 @@ document.addEventListener("DOMContentLoaded", () => {
               pageSpan.style.fontSize = "0.9rem";
               pageSpan.style.cursor = "pointer";
               pageSpan.style.fontWeight = "normal";
-              // Pass the ORIGINAL ID to the copy function
+              // Pass the NEW item ID to the copy function
               pageSpan.onclick = (e) => {
-                e.stopPropagation(); // Prevent potential parent clicks if needed
-                copyTableColumns(result.item.originalId);
+                e.stopPropagation();
+                copyTableColumns(result.item.id); // Use item.id here
               };
               caption.appendChild(pageSpan);
             }
           } else if (caption) {
-            // Original ID found, but it's not a CAPTION
-            console.warn(`找到 ID 为 ${result.item.originalId} 的元素, 但它不是 CAPTION。`);
+            // Found element with item.id, but it's not a CAPTION
+            console.warn(`找到 ID 为 ${result.item.id} 的元素, 但它不是 CAPTION。`);
           } else {
-            // Original ID not found within the loaded HTML for this item
-            // console.warn(`在为 ${result.item.name} 加载的 HTML 中找不到原始 ID: ${result.item.originalId}`);
+            // item.id not found within the loaded HTML for this item
+            // console.warn(`在为 ${result.item.name} 加载的 HTML 中找不到 ID: ${result.item.id}`);
           }
         }
         // --- 修改结束 ---
