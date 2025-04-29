@@ -499,7 +499,7 @@ span.highlighted.purple {
   box-sizing: border-box;
   display: table-cell;
   padding: 0.37em 0.75em;
-  min-width: 5em;
+  /* min-width: 5em; */
   border-right: var(--document-hairline-width) solid var(--document-table-border-color);
 }
 .document-wrapper td:last-of-type,
