@@ -25,7 +25,9 @@ function copyTableColumns(captionId) {
     // 确保行有足够的单元格 (至少4个: 序号, 单词, 读音, 日文例句)
     if (cells.length >= 4) {
       const cell3Text = cells[2].textContent.trim(); // 第3列 (索引 2)
-      const cell4Text = cells[3].textContent.trim(); // 第4列 (索引 3)
+      let cell4Text = cells[3].textContent.trim(); // 第4列 (索引 3)
+      // 去除例句中的 (自) 和 (他) 标记
+      cell4Text = cell4Text.replace(/（[自他]）[。]?/g, "").trim();
       // 如果两列都有内容才复制
       if (cell3Text || cell4Text) {
         textToCopy += cell3Text + "\n" + cell4Text + "\n\n"; // 列之间换行，每对之间加两个换行
