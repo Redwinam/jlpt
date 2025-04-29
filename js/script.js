@@ -63,8 +63,7 @@ const contentData = {
           {
             title: "第7回",
             items: [
-              { name: "い形容詞 (1)", id: "s1-g7-i1-1", file: "7-1-1", page: "38" },
-              { name: "い形容詞 (1)", id: "s1-g7-i1-2", file: "7-1-2", page: "38" },
+              { name: "い形容詞 (1)", id: "s1-g7-i1", file: "7-1", page: "38" },
               { name: "い形容詞 (2)", id: "s1-g7-i2", file: "7-2", page: "39" },
             ],
           },
