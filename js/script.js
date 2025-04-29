@@ -1,14 +1,16 @@
-// --- 核心数据结构 (简化版) ---
+// --- 核心数据结构 (更新版) ---
 const contentData = {
   "n1-kanji": {
     navTitle: "N1级 汉字",
-    pageTitle: "新完全掌握日语能力考试 N1级 汉字",
-    basePath: "N1 - 汉字/", // <--- 新增基础路径
+    level: "N1级", // <--- 新增 level
+    category: "汉字", // <--- 新增 category
+    levelColor: "purple", // <--- (可选) 等级颜色
+    categoryColor: "red", // <--- (可选) 类别颜色
+    basePath: "N1 - 汉字/",
     sections: [
       {
         title: "第1部　訓読み",
         fragments: [
-          // <--- 只需 ID
           { id: "第1回　動詞Aレベル" },
           { id: "第2回　動詞Aレベル" },
           { id: "第3回　動詞Bレベル" },
@@ -26,6 +28,7 @@ const contentData = {
       },
     ],
   },
+  // 未来可以添加其他类型
 };
 // --- 核心数据结构结束 ---
 
@@ -123,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const tocList = document.querySelector("#toc ul");
   const topNav = document.querySelector(".top-nav ul");
 
-  // --- 重构: generateTOC 函数 (使用简化后的 JSON) ---
+  // Generate TOC function (using simplified JSON)
   function generateTOC(contentType) {
     tocList.innerHTML = "";
     if (!contentData[contentType] || !contentData[contentType].sections) {
@@ -137,14 +140,14 @@ document.addEventListener("DOMContentLoaded", () => {
         section.fragments.forEach((fragment) => {
           const li = document.createElement("li");
           const a = document.createElement("a");
-          const tocTitle = fragment.tocTitle || fragment.id; // 优先用 JSON 中定义的，否则用 id
+          const tocTitle = fragment.tocTitle || fragment.id;
           a.href = `#${fragment.id}`;
           a.textContent = tocTitle;
-          a.title = tocTitle; // Use the same for tooltip
+          a.title = tocTitle;
 
           a.addEventListener("click", (e) => {
             e.preventDefault();
-            const targetElement = document.getElementById(fragment.id); // Use getElementById
+            const targetElement = document.getElementById(fragment.id);
             if (targetElement) {
               targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
             } else {
@@ -160,9 +163,8 @@ document.addEventListener("DOMContentLoaded", () => {
       tocList.innerHTML = "<li>无目录项</li>";
     }
   }
-  // --- 重构结束 ---
 
-  // --- 重构: loadContent 函数 (使用简化后的 JSON 和 getElementById) ---
+  // Load content function (using simplified JSON, getElementById, and dynamic H1)
   async function loadContent(contentType) {
     if (!contentData[contentType]) {
       contentArea.innerHTML = "<h1>错误：未定义的内容类型</h1>";
@@ -171,9 +173,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const source = contentData[contentType];
-    let initialHtml = `<h1>${source.pageTitle}</h1>`;
+
+    // --- 更新: 动态生成 H1 ---
+    let h1Title = `新完全掌握日语能力考试 `;
+    if (source.level) {
+      const levelColor = source.levelColor || "purple"; // 默认紫色
+      h1Title += `<mark class="highlighted ${levelColor}">${source.level}</mark> `;
+    }
+    if (source.category) {
+      const categoryColor = source.categoryColor || "red"; // 默认红色
+      h1Title += `<mark class="highlighted ${categoryColor}">${source.category}</mark>`;
+    }
+    // 创建一个基于 contentType 的安全 ID (可选，但有助于区分)
+    const h1Id = `title-${contentType}`.replace(/[^a-zA-Z0-9-_]/g, "-");
+    let initialHtml = `<h1 id="${h1Id}">${h1Title}</h1>`;
+    // --- 更新结束 ---
+
     source.sections.forEach((section) => {
-      // Create a safe ID for the section header if needed
       const sectionId = `section-${section.title.replace(/[^a-zA-Z0-9-_]/g, "-")}`;
       initialHtml += `<h2 id="${sectionId}">${section.title}</h2>`;
       initialHtml += `<div class="section-content" data-section-title="${section.title}"></div>`;
@@ -181,19 +197,15 @@ document.addEventListener("DOMContentLoaded", () => {
     contentArea.innerHTML = initialHtml;
     tocList.innerHTML = "<li>加载中...</li>";
 
-    // 2. 异步加载所有片段
     const allFragments = source.sections.flatMap((s) => s.fragments || []);
     const fragmentPromises = allFragments.map(async (fragment) => {
-      // --- 动态生成 filePath ---
       const filePath = `${source.basePath}${fragment.id}.html`;
-      // ---
       try {
         const response = await fetch(filePath);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status} for ${filePath}`);
         }
         const fragmentHtml = await response.text();
-        // Pass fragment id along with html
         return { id: fragment.id, html: fragmentHtml, success: true };
       } catch (error) {
         console.error(`加载片段失败: ${filePath}`, error);
@@ -203,31 +215,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const loadedResults = await Promise.all(fragmentPromises);
 
-    // 4. 将加载的 HTML 插入到对应的 section 容器中
     source.sections.forEach((section) => {
       const sectionContainer = contentArea.querySelector(`.section-content[data-section-title="${section.title}"]`);
       if (!sectionContainer) return;
 
       let sectionHtmlContent = "";
-      const fragmentsInSection = loadedResults.filter((r) => section.fragments.some((f) => f.id === r.id)); // Match by id
+      const fragmentsInSection = loadedResults.filter((r) => section.fragments.some((f) => f.id === r.id));
 
       fragmentsInSection.forEach((result) => {
-        // --- 使用 getElementById 安全的容器 ID ---
         const containerId = `container-${result.id}`;
-        // Inject the fragment HTML into its container
         sectionHtmlContent += `<div class="fragment-container" id="${containerId}">${result.html}</div>`;
-        // ---
       });
       sectionContainer.innerHTML = sectionHtmlContent;
 
-      // 5. 在内容插入后，为每个片段的 caption 添加按钮 (使用 getElementById)
       fragmentsInSection.forEach((result) => {
         if (result.success) {
-          // --- 使用 getElementById 查找 caption ---
           const caption = document.getElementById(result.id);
-          // ---
           if (caption && caption.tagName === "CAPTION") {
-            // Verify it's a caption
             const button = document.createElement("button");
             button.textContent = "复制读音和例句";
             button.classList.add("copy-button");
@@ -241,12 +245,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // 6. 最后生成 TOC
     generateTOC(contentType);
   }
-  // --- 重构结束 ---
 
-  // 导航点击事件处理 (基本不变)
+  // Navigation click handler (remains the same)
   topNav.addEventListener("click", (e) => {
     if (e.target.tagName === "A" && e.target.dataset.contentType) {
       e.preventDefault();
@@ -261,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 初始加载默认内容 (基本不变)
+  // Initial load (remains the same)
   const defaultContentType = "n1-kanji";
   const defaultNavLink = topNav.querySelector(`a[data-content-type="${defaultContentType}"]`);
   if (defaultNavLink && contentData[defaultContentType]) {
