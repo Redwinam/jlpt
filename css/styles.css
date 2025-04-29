@@ -521,6 +521,9 @@ span.highlighted.purple {
   padding: 0.37em 0.75em;
   text-align: left;
   border-bottom: var(--document-hairline-width) solid var(--document-table-border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .document-wrapper .code_comment {
   color: var(--document-code-syntax-highlight-comment);

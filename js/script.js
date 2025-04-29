@@ -205,6 +205,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     contentArea.innerHTML = contentHtml; // 更新内容区域
+
+    // --- 新增：动态添加复制按钮 ---
+    const captionsInContent = contentArea.querySelectorAll("caption[id]");
+    captionsInContent.forEach((caption) => {
+      const button = document.createElement("button");
+      button.textContent = "复制读音和例句";
+
+      button.style.cursor = "pointer";
+
+      // 直接使用 caption 的 id 为 copyTableColumns 函数传参
+      button.onclick = () => copyTableColumns(caption.id);
+
+      // 将按钮附加到 caption 元素的内部末尾
+      caption.appendChild(button);
+
+      // 确保 caption 能包含浮动元素
+      caption.style.overflow = "hidden";
+      // 添加一点内边距，防止按钮紧贴边缘 (可选)
+      // caption.style.paddingRight = '5px';
+    });
+    // --- 新增结束 ---
+
     generateTOC(); // 生成目录
   }
 
