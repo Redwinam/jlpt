@@ -402,9 +402,11 @@ span.highlighted.purple {
   background-color: var(--document-highlighter-purple-background-color);
 }
 .document-wrapper u {
-  text-decoration: underline;
+  text-decoration: none;
   text-decoration-color: var(--document-accent-color);
   unicode-bidi: embed;
+  border-bottom: var(--document-hairline-width) solid var(--document-accent-color);
+  font-weight: 500;
 }
 .document-wrapper s,
 .document-wrapper strike {
