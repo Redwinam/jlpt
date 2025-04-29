@@ -1,3 +1,34 @@
+// --- 核心数据结构 (简化版) ---
+const contentData = {
+  "n1-kanji": {
+    navTitle: "N1级 汉字",
+    pageTitle: "新完全掌握日语能力考试 N1级 汉字",
+    basePath: "N1 - 汉字/", // <--- 新增基础路径
+    sections: [
+      {
+        title: "第1部　訓読み",
+        fragments: [
+          // <--- 只需 ID
+          { id: "第1回　動詞Aレベル" },
+          { id: "第2回　動詞Aレベル" },
+          { id: "第3回　動詞Bレベル" },
+          { id: "第4回　動詞Bレベル" },
+          { id: "第5回　動詞Cレベル" },
+          { id: "第6回　動詞Cレベル" },
+          { id: "第7回　い形容詞" },
+          { id: "第8回　な形容詞　副詞・その他" },
+          { id: "第9回　名詞　(1) 道具" },
+          { id: "第9回　名詞　(2) 人・衣服" },
+          { id: "第9回　名詞　(3) 身体・感情" },
+          { id: "第10回　名詞　(4) 自然　(5) 植物・食物　(6) 建造物・形状" },
+          { id: "第11回　名詞　(7) 野生・生活　(8) 経済・生活　(9) 時・空間" },
+        ],
+      },
+    ],
+  },
+};
+// --- 核心数据结构结束 ---
+
 function copyTableColumns(captionId) {
   const captionElement = document.getElementById(captionId);
   if (!captionElement) {
@@ -5,15 +36,19 @@ function copyTableColumns(captionId) {
     return;
   }
 
-  const tableElement = captionElement.parentElement; // Caption 是 Table 的直接子元素
-  if (!tableElement || tableElement.tagName !== "TABLE") {
-    console.error("找不到父级 Table 元素");
+  let tableElement = captionElement.closest("table");
+  if (!tableElement) {
+    tableElement = captionElement.parentElement.tagName === "TABLE" ? captionElement.parentElement : null;
+  }
+
+  if (!tableElement) {
+    console.error("找不到父级 Table 元素 for caption:" + captionId);
     return;
   }
 
   const tbody = tableElement.querySelector("tbody");
   if (!tbody) {
-    console.error("找不到 tbody");
+    console.error("找不到 tbody for table related to caption:" + captionId);
     return;
   }
 
@@ -22,49 +57,39 @@ function copyTableColumns(captionId) {
 
   rows.forEach((row) => {
     const cells = row.querySelectorAll("td");
-    // 确保行有足够的单元格 (至少4个: 序号, 单词, 读音, 日文例句)
     if (cells.length >= 4) {
-      const cell3Text = cells[2].textContent.trim(); // 第3列 (索引 2)
-      let cell4Text = cells[3].textContent.trim(); // 第4列 (索引 3)
-      // 去除例句中的 (自) 和 (他) 标记
+      const cell3Text = cells[2].textContent.trim();
+      let cell4Text = cells[3].textContent.trim();
       cell4Text = cell4Text.replace(/（[自他]）[。]?/g, "").trim();
-
-      // 新增：如果日文例句非空且不以句号结尾，则添加句号
       if (cell4Text && !cell4Text.endsWith("。")) {
         cell4Text += "。";
       }
-
-      // 如果两列都有内容才复制
       if (cell3Text || cell4Text) {
-        textToCopy += cell3Text + "\n" + cell4Text + "\n\n"; // 列之间换行，每对之间加两个换行
+        textToCopy += cell3Text + "\n" + cell4Text + "\n\n";
       }
     } else {
       console.warn("行单元格数量不足:", row);
     }
   });
 
-  // 移除末尾多余的换行符
   textToCopy = textToCopy.trim();
 
   if (textToCopy) {
     navigator.clipboard
       .writeText(textToCopy)
       .then(() => {
-        // alert("已复制到剪贴板！");
-        showNotification("已复制到剪贴板！"); // 使用新的通知函数
+        showNotification("已复制到剪贴板！");
       })
       .catch((err) => {
         console.error("无法复制文本: ", err);
-        alert("复制失败！请检查浏览器权限或控制台错误信息。"); // 失败提示暂时保留 alert
+        alert("复制失败！请检查浏览器权限或控制台错误信息。");
       });
   } else {
     alert("表格中没有可复制的内容。");
   }
 }
 
-// 新增：显示通知的函数
 function showNotification(message) {
-  // 创建通知元素
   const notification = document.createElement("div");
   notification.textContent = message;
   notification.style.position = "fixed";
@@ -75,191 +100,185 @@ function showNotification(message) {
   notification.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
   notification.style.color = "white";
   notification.style.borderRadius = "5px";
-  notification.style.zIndex = "1000"; // 确保在顶层
-  notification.style.opacity = "0"; // 初始透明
-  notification.style.transition = "opacity 0.5s ease-in-out"; // 添加淡入淡出效果
+  notification.style.zIndex = "1000";
+  notification.style.opacity = "0";
+  notification.style.transition = "opacity 0.5s ease-in-out";
 
-  // 添加到页面
   document.body.appendChild(notification);
 
-  // 淡入效果
   setTimeout(() => {
     notification.style.opacity = "1";
-  }, 10); // 延迟一点点以确保过渡效果生效
+  }, 10);
 
-  // 2秒后自动移除
   setTimeout(() => {
-    notification.style.opacity = "0"; // 开始淡出
-    // 在过渡结束后移除元素
+    notification.style.opacity = "0";
     notification.addEventListener("transitionend", () => {
       notification.remove();
     });
-  }, 2000); // 显示 2 秒
+  }, 2000);
 }
-
-// --- 新增代码开始 ---
 
 document.addEventListener("DOMContentLoaded", () => {
   const contentArea = document.getElementById("content-area");
   const tocList = document.querySelector("#toc ul");
   const topNav = document.querySelector(".top-nav ul");
 
-  // 定义不同内容类型及其对应的 HTML 片段文件
-  const contentSources = {
-    "n1-kanji": {
-      title: "N1级 汉字",
-      fragments: [
-        "N1 - 汉字/第1回　動詞Aレベル.html",
-        "N1 - 汉字/第2回　動詞Aレベル.html",
-        "N1 - 汉字/第3回　動詞Bレベル.html",
-        "N1 - 汉字/第4回　動詞Bレベル.html",
-        "N1 - 汉字/第5回　動詞Cレベル.html",
-        "N1 - 汉字/第6回　動詞Cレベル.html",
-        "N1 - 汉字/第7回　い形容詞.html",
-        "N1 - 汉字/第8回　な形容詞　副詞・その他.html",
-        "N1 - 汉字/第9回　名詞　(1) 道具.html",
-        "N1 - 汉字/第9回　名詞　(2) 人・衣服.html",
-        "N1 - 汉字/第9回　名詞　(3) 身体・感情.html",
-        "N1 - 汉字/第10回　名詞　(4) 自然　(5) 植物・食物　(6) 建造物・形状.html",
-        "N1 - 汉字/第11回　名詞　(7) 野生・生活　(8) 経済・生活　(9) 時・空間.html",
-      ],
-      // 可以为其他类型添加 H1/H2 结构
-      structure: `
-                <h1 id="新完全掌握日语能力考试 ==🟣N1级== ==🔴汉字==">新完全掌握日语能力考试 <mark class="highlighted purple">N1级</mark> <mark class="highlighted red">汉字</mark></h1>
-                <h2 id="第1部　訓読み">第1部　訓読み</h2>
-                <!-- 表格内容将插入这里 -->
-            `,
-    },
-    // 'n1-grammar': {
-    //     title: 'N1级 语法',
-    //     fragments: ['grammar/part1.html', 'grammar/part2.html'],
-    //      structure: `<h1>N1级 语法</h1><h2>第一章</h2>...`
-    // },
-    // ... 其他内容类型
-  };
-
-  // 生成目录
-  function generateTOC() {
-    tocList.innerHTML = ""; // 清空现有目录
-    const captions = contentArea.querySelectorAll("caption[id]");
-    if (captions.length === 0) {
+  // --- 重构: generateTOC 函数 (使用简化后的 JSON) ---
+  function generateTOC(contentType) {
+    tocList.innerHTML = "";
+    if (!contentData[contentType] || !contentData[contentType].sections) {
       tocList.innerHTML = "<li>无目录项</li>";
       return;
     }
-    captions.forEach((caption) => {
-      const li = document.createElement("li");
-      const a = document.createElement("a");
-      a.href = `#${caption.id}`;
-      a.textContent = caption.textContent.trim() || caption.id;
-      // 平滑滚动效果 (可选)
-      a.addEventListener("click", (e) => {
-        e.preventDefault();
-        const targetElement = document.getElementById(caption.id);
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
-          // 更新地址栏 hash，但不触发页面跳转
-          // history.pushState(null, null, `#${caption.id}`);
-        }
-      });
-      li.appendChild(a);
-      tocList.appendChild(li);
-    });
-  }
 
-  // 加载内容
+    const sections = contentData[contentType].sections;
+    sections.forEach((section) => {
+      if (section.fragments && section.fragments.length > 0) {
+        section.fragments.forEach((fragment) => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          const tocTitle = fragment.tocTitle || fragment.id; // 优先用 JSON 中定义的，否则用 id
+          a.href = `#${fragment.id}`;
+          a.textContent = tocTitle;
+          a.title = tocTitle; // Use the same for tooltip
+
+          a.addEventListener("click", (e) => {
+            e.preventDefault();
+            const targetElement = document.getElementById(fragment.id); // Use getElementById
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+            } else {
+              console.warn(`无法找到 TOC 目标元素: #${fragment.id}`);
+            }
+          });
+          li.appendChild(a);
+          tocList.appendChild(li);
+        });
+      }
+    });
+    if (tocList.children.length === 0) {
+      tocList.innerHTML = "<li>无目录项</li>";
+    }
+  }
+  // --- 重构结束 ---
+
+  // --- 重构: loadContent 函数 (使用简化后的 JSON 和 getElementById) ---
   async function loadContent(contentType) {
-    if (!contentSources[contentType]) {
+    if (!contentData[contentType]) {
       contentArea.innerHTML = "<h1>错误：未定义的内容类型</h1>";
       tocList.innerHTML = "";
       return;
     }
 
-    const source = contentSources[contentType];
-    contentArea.innerHTML = '<h1><span class="loading-spinner"></span> 正在加载 ' + source.title + "...</h1>"; // 显示加载提示
+    const source = contentData[contentType];
+    let initialHtml = `<h1>${source.pageTitle}</h1>`;
+    source.sections.forEach((section) => {
+      // Create a safe ID for the section header if needed
+      const sectionId = `section-${section.title.replace(/[^a-zA-Z0-9-_]/g, "-")}`;
+      initialHtml += `<h2 id="${sectionId}">${section.title}</h2>`;
+      initialHtml += `<div class="section-content" data-section-title="${section.title}"></div>`;
+    });
+    contentArea.innerHTML = initialHtml;
     tocList.innerHTML = "<li>加载中...</li>";
 
-    let contentHtml = source.structure || ""; // 使用定义的结构或空字符串
-    const fragmentPromises = source.fragments.map(async (fragmentUrl) => {
+    // 2. 异步加载所有片段
+    const allFragments = source.sections.flatMap((s) => s.fragments || []);
+    const fragmentPromises = allFragments.map(async (fragment) => {
+      // --- 动态生成 filePath ---
+      const filePath = `${source.basePath}${fragment.id}.html`;
+      // ---
       try {
-        const response = await fetch(fragmentUrl);
+        const response = await fetch(filePath);
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status} for ${fragmentUrl}`);
+          throw new Error(`HTTP error! status: ${response.status} for ${filePath}`);
         }
-        return await response.text();
+        const fragmentHtml = await response.text();
+        // Pass fragment id along with html
+        return { id: fragment.id, html: fragmentHtml, success: true };
       } catch (error) {
-        console.error(`加载片段失败: ${fragmentUrl}`, error);
-        return `<p style="color: red;">加载失败: ${fragmentUrl}</p>`; // 显示错误信息
+        console.error(`加载片段失败: ${filePath}`, error);
+        return { id: fragment.id, html: `<p style="color: red;">加载失败: ${filePath}</p>`, success: false };
       }
     });
 
-    // 等待所有片段加载完成
-    const fragmentContents = await Promise.all(fragmentPromises);
+    const loadedResults = await Promise.all(fragmentPromises);
 
-    // 将加载的片段内容拼接到结构中
-    // 如果有特定插入点标记则用标记，否则直接追加
-    const insertionPoint = "<!-- 表格内容将插入这里 -->";
-    if (contentHtml.includes(insertionPoint)) {
-      contentHtml = contentHtml.replace(insertionPoint, fragmentContents.join("\n"));
-    } else {
-      contentHtml += fragmentContents.join("\n");
-    }
+    // 4. 将加载的 HTML 插入到对应的 section 容器中
+    source.sections.forEach((section) => {
+      const sectionContainer = contentArea.querySelector(`.section-content[data-section-title="${section.title}"]`);
+      if (!sectionContainer) return;
 
-    contentArea.innerHTML = contentHtml; // 更新内容区域
+      let sectionHtmlContent = "";
+      const fragmentsInSection = loadedResults.filter((r) => section.fragments.some((f) => f.id === r.id)); // Match by id
 
-    // --- 新增：动态添加复制按钮 ---
-    const captionsInContent = contentArea.querySelectorAll("caption[id]");
-    captionsInContent.forEach((caption) => {
-      const button = document.createElement("button");
-      button.textContent = "复制读音和例句";
+      fragmentsInSection.forEach((result) => {
+        // --- 使用 getElementById 安全的容器 ID ---
+        const containerId = `container-${result.id}`;
+        // Inject the fragment HTML into its container
+        sectionHtmlContent += `<div class="fragment-container" id="${containerId}">${result.html}</div>`;
+        // ---
+      });
+      sectionContainer.innerHTML = sectionHtmlContent;
 
-      button.style.cursor = "pointer";
-
-      // 直接使用 caption 的 id 为 copyTableColumns 函数传参
-      button.onclick = () => copyTableColumns(caption.id);
-
-      // 将按钮附加到 caption 元素的内部末尾
-      caption.appendChild(button);
-
-      // 确保 caption 能包含浮动元素
-      caption.style.overflow = "hidden";
-      // 添加一点内边距，防止按钮紧贴边缘 (可选)
-      // caption.style.paddingRight = '5px';
+      // 5. 在内容插入后，为每个片段的 caption 添加按钮 (使用 getElementById)
+      fragmentsInSection.forEach((result) => {
+        if (result.success) {
+          // --- 使用 getElementById 查找 caption ---
+          const caption = document.getElementById(result.id);
+          // ---
+          if (caption && caption.tagName === "CAPTION") {
+            // Verify it's a caption
+            const button = document.createElement("button");
+            button.textContent = "复制读音和例句";
+            button.classList.add("copy-button");
+            button.onclick = () => copyTableColumns(result.id);
+            caption.appendChild(button);
+            caption.style.position = "relative";
+          } else if (caption) {
+            console.warn(`Found element with id ${result.id}, but it's not a caption.`);
+          }
+        }
+      });
     });
-    // --- 新增结束 ---
 
-    generateTOC(); // 生成目录
+    // 6. 最后生成 TOC
+    generateTOC(contentType);
   }
+  // --- 重构结束 ---
 
-  // 导航点击事件处理
+  // 导航点击事件处理 (基本不变)
   topNav.addEventListener("click", (e) => {
     if (e.target.tagName === "A" && e.target.dataset.contentType) {
       e.preventDefault();
       const contentType = e.target.dataset.contentType;
-
-      // 更新 active 状态
+      if (!contentData[contentType]) {
+        console.error("无效的内容类型:", contentType);
+        return;
+      }
       topNav.querySelectorAll("a").forEach((link) => link.classList.remove("active"));
       e.target.classList.add("active");
-
       loadContent(contentType);
     }
   });
 
-  // 初始加载默认内容 (N1 汉字)
+  // 初始加载默认内容 (基本不变)
   const defaultContentType = "n1-kanji";
   const defaultNavLink = topNav.querySelector(`a[data-content-type="${defaultContentType}"]`);
-  if (defaultNavLink) {
+  if (defaultNavLink && contentData[defaultContentType]) {
     defaultNavLink.classList.add("active");
     loadContent(defaultContentType);
-  } else if (Object.keys(contentSources).length > 0) {
-    // 如果默认的找不到，加载第一个可用的
-    const firstContentType = Object.keys(contentSources)[0];
+  } else if (Object.keys(contentData).length > 0) {
+    const firstContentType = Object.keys(contentData)[0];
     const firstNavLink = topNav.querySelector(`a[data-content-type="${firstContentType}"]`);
-    if (firstNavLink) firstNavLink.classList.add("active");
-    loadContent(firstContentType);
+    if (firstNavLink && contentData[firstContentType]) {
+      firstNavLink.classList.add("active");
+      loadContent(firstContentType);
+    } else {
+      contentArea.innerHTML = "<h1>没有可加载的内容</h1>";
+      tocList.innerHTML = "";
+    }
   } else {
     contentArea.innerHTML = "<h1>没有可加载的内容</h1>";
     tocList.innerHTML = "";
   }
 });
-
-// --- 新增代码结束 ---
