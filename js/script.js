@@ -28,6 +28,12 @@ function copyTableColumns(captionId) {
       let cell4Text = cells[3].textContent.trim(); // 第4列 (索引 3)
       // 去除例句中的 (自) 和 (他) 标记
       cell4Text = cell4Text.replace(/（[自他]）[。]?/g, "").trim();
+
+      // 新增：如果日文例句非空且不以句号结尾，则添加句号
+      if (cell4Text && !cell4Text.endsWith("。")) {
+        cell4Text += "。";
+      }
+
       // 如果两列都有内容才复制
       if (cell3Text || cell4Text) {
         textToCopy += cell3Text + "\n" + cell4Text + "\n\n"; // 列之间换行，每对之间加两个换行
