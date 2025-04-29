@@ -51,26 +51,6 @@
         position: relative; /* 为了 TOC 定位 */
       }
 
-      #content-area {
-        flex-grow: 1; /* 内容区域占据大部分空间 */
-        margin-right: 220px; /* 为右侧 TOC 留出空间 */
-        /* 添加原始文件中的 h1, h2 样式可能更好 */
-      }
-      #content-area h1,
-      #content-area h2 {
-        /* 根据需要从 styles.css 或原始文件复制样式 */
-        /* 示例 */
-        margin-top: 1.5em;
-        margin-bottom: 0.8em;
-        font-weight: bold;
-      }
-      #content-area h1 {
-        font-size: 2em;
-      }
-      #content-area h2 {
-        font-size: 1.5em;
-      }
-
       #toc {
         position: fixed; /* 固定位置 */
         right: 2em; /* 距离右边 */
@@ -112,36 +92,6 @@
         #toc {
           display: none;
         }
-      }
-
-      /* 表格样式（可能需要从 styles.css 调整或合并） */
-      #content-area table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 2em;
-        font-size: 0.95em;
-      }
-      #content-area caption {
-        font-weight: bold;
-        font-size: 1.2em;
-        margin-bottom: 0.5em;
-        text-align: left;
-        padding-top: 1em; /* 让 TOC 跳转后标题可见 */
-      }
-      #content-area th,
-      #content-area td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-      }
-      #content-area thead {
-        background-color: #f2f2f2;
-      }
-      #content-area button {
-        margin-left: 10px;
-        padding: 2px 5px;
-        cursor: pointer;
-        vertical-align: middle; /* 让按钮和标题对齐 */
       }
     </style>
   </head>
