@@ -10,25 +10,52 @@ const contentData = {
     sections: [
       {
         title: "第1部　訓読み",
-        fragments: [
-          { id: "第1回　動詞Aレベル", page: "3-5" },
-          { id: "第2回　動詞Aレベル", page: "8-11" },
-          { id: "第3回　動詞Bレベル", page: "15-17" },
-          { id: "第4回　動詞Bレベル", page: "21-23" },
-          { id: "第5回　動詞Cレベル", page: "27-29" },
-          { id: "第6回　動詞Cレベル", page: "33-35" },
-          { id: "第7回　い形容詞", page: "38-39" },
-          { id: "第8回　な形容詞", page: "42" },
-          { id: "第8回　副詞・その他", page: "43" },
-          { id: "第9回　名詞 (1) 道具", page: "46" },
-          { id: "第9回　名詞 (2) 人・衣服", page: "47" },
-          { id: "第9回　名詞 (3) 身体・感情", page: "48" },
-          { id: "第10回　名詞 (4) 自然", page: "51" },
-          { id: "第10回　名詞 (5) 植物・食物", page: "52" },
-          { id: "第10回　名詞 (6) 建造物・形状", page: "53" },
-          { id: "第11回　名詞 (7) 野生・生活", page: "55" },
-          { id: "第11回　名詞 (8) 経済・生活", page: "56" },
-          { id: "第11回　名詞 (9) 時・空間", page: "57" },
+        groups: [
+          {
+            title: "第1回",
+            items: [
+              { name: "動詞Aレベル (1)", id: "s1-g1-i1", file: "1-1", page: "3" },
+              { name: "動詞Aレベル (2)", id: "s1-g1-i2", file: "1-2", page: "4" },
+              { name: "動詞Aレベル (3)", id: "s1-g1-i3", file: "1-3", page: "5" },
+            ],
+          },
+          { title: "第2回", items: [{ name: "動詞Aレベル", id: "s1-g2-i1", file: "2-1", page: "8-11", originalId: "第2回　動詞Aレベル" }] },
+          { title: "第3回", items: [{ name: "動詞Bレベル", id: "s1-g3-i1", file: "3-1", page: "15-17", originalId: "第3回　動詞Bレベル" }] },
+          { title: "第4回", items: [{ name: "動詞Bレベル", id: "s1-g4-i1", file: "4-1", page: "21-23", originalId: "第4回　動詞Bレベル" }] },
+          { title: "第5回", items: [{ name: "動詞Cレベル", id: "s1-g5-i1", file: "5-1", page: "27-29", originalId: "第5回　動詞Cレベル" }] },
+          { title: "第6回", items: [{ name: "動詞Cレベル", id: "s1-g6-i1", file: "6-1", page: "33-35", originalId: "第6回　動詞Cレベル" }] },
+          { title: "第7回", items: [{ name: "い形容詞", id: "s1-g7-i1", file: "7-1", page: "38-39", originalId: "第7回　い形容詞" }] },
+          {
+            title: "第8回",
+            items: [
+              { name: "な形容詞", id: "s1-g8-i1", file: "8-1", page: "42", originalId: "第8回　な形容詞" },
+              { name: "副詞・その他", id: "s1-g8-i2", file: "8-2", page: "43", originalId: "第8回　副詞・その他" },
+            ],
+          },
+          {
+            title: "第9回",
+            items: [
+              { name: "名詞 (1) 道具", id: "s1-g9-i1", file: "9-1", page: "46", originalId: "第9回　名詞 (1) 道具" },
+              { name: "名詞 (2) 人・衣服", id: "s1-g9-i2", file: "9-2", page: "47", originalId: "第9回　名詞 (2) 人・衣服" },
+              { name: "名詞 (3) 身体・感情", id: "s1-g9-i3", file: "9-3", page: "48", originalId: "第9回　名詞 (3) 身体・感情" },
+            ],
+          },
+          {
+            title: "第10回",
+            items: [
+              { name: "名詞 (4) 自然", id: "s1-g10-i1", file: "10-1", page: "51", originalId: "第10回　名詞 (4) 自然" },
+              { name: "名詞 (5) 植物・食物", id: "s1-g10-i2", file: "10-2", page: "52", originalId: "第10回　名詞 (5) 植物・食物" },
+              { name: "名詞 (6) 建造物・形状", id: "s1-g10-i3", file: "10-3", page: "53", originalId: "第10回　名詞 (6) 建造物・形状" },
+            ],
+          },
+          {
+            title: "第11回",
+            items: [
+              { name: "名詞 (7) 野生・生活", id: "s1-g11-i1", file: "11-1", page: "55", originalId: "第11回　名詞 (7) 野生・生活" },
+              { name: "名詞 (8) 経済・生活", id: "s1-g11-i2", file: "11-2", page: "56", originalId: "第11回　名詞 (8) 経済・生活" },
+              { name: "名詞 (9) 時・空間", id: "s1-g11-i3", file: "11-3", page: "57", originalId: "第11回　名詞 (9) 時・空間" },
+            ],
+          },
         ],
       },
     ],
@@ -148,30 +175,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const sections = contentData[contentType].sections;
-    sections.forEach((section) => {
-      if (section.fragments && section.fragments.length > 0) {
-        section.fragments.forEach((fragment) => {
-          const li = document.createElement("li");
-          const a = document.createElement("a");
-          const tocTitle = fragment.tocTitle || fragment.id;
-          a.href = `#${fragment.id}`;
-          a.textContent = tocTitle;
-          a.title = tocTitle;
+    sections.forEach((section, sectionIndex) => {
+      if (section.groups && section.groups.length > 0) {
+        section.groups.forEach((group, groupIndex) => {
+          const groupLi = document.createElement("li");
+          groupLi.textContent = group.title;
+          groupLi.classList.add("toc-group");
 
-          a.addEventListener("click", (e) => {
-            e.preventDefault();
-            const targetElement = document.getElementById(fragment.id);
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
-            } else {
-              console.warn(`无法找到 TOC 目标元素: #${fragment.id}`);
-            }
-          });
-          li.appendChild(a);
-          tocList.appendChild(li);
+          const itemsUl = document.createElement("ul");
+
+          if (group.items && group.items.length > 0) {
+            group.items.forEach((item, itemIndex) => {
+              const itemLi = document.createElement("li");
+              const a = document.createElement("a");
+              const tocTitle = item.name;
+              a.href = `#container-${item.id}`;
+              a.textContent = tocTitle;
+              a.title = tocTitle;
+
+              a.addEventListener("click", (e) => {
+                e.preventDefault();
+                const targetElement = document.getElementById(`container-${item.id}`);
+                if (targetElement) {
+                  targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+                } else {
+                  console.warn(`无法找到 TOC 目标元素: #container-${item.id}`);
+                }
+              });
+              itemLi.appendChild(a);
+              itemsUl.appendChild(itemLi);
+            });
+          }
+          groupLi.appendChild(itemsUl);
+          tocList.appendChild(groupLi);
         });
       }
     });
+
     if (tocList.children.length === 0) {
       tocList.innerHTML = "<li>无目录项</li>";
     }
@@ -190,88 +230,112 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 更新: 动态生成 H1 ---
     let h1Title = `新完全掌握日语能力考试 `;
     if (source.level) {
-      const levelColor = source.levelColor || "purple"; // 默认紫色
+      const levelColor = source.levelColor || "purple";
       h1Title += `<mark class="highlighted ${levelColor}">${source.level}</mark> `;
     }
     if (source.category) {
-      const categoryColor = source.categoryColor || "red"; // 默认红色
+      const categoryColor = source.categoryColor || "red";
       h1Title += `<mark class="highlighted ${categoryColor}">${source.category}</mark>`;
     }
-    // 创建一个基于 contentType 的安全 ID (可选，但有助于区分)
     const h1Id = `title-${contentType}`.replace(/[^a-zA-Z0-9-_]/g, "-");
     let initialHtml = `<h1 id="${h1Id}">${h1Title}</h1>`;
     // --- 更新结束 ---
 
+    // --- 修改: 基于 groups 构建初始 HTML 结构 ---
     source.sections.forEach((section) => {
-      const sectionId = `section-${section.title.replace(/[^a-zA-Z0-9-_]/g, "-")}`;
-      initialHtml += `<h2 id="${sectionId}">${section.title}</h2>`;
-      initialHtml += `<div class="section-content" data-section-title="${section.title}"></div>`;
+      const sectionTitleId = `section-${section.title.replace(/[^a-zA-Z0-9-_]/g, "-")}`; // Keep section title H2
+      initialHtml += `<h2 id="${sectionTitleId}">${section.title}</h2>`;
+      if (section.groups) {
+        section.groups.forEach((group) => {
+          // Create a container for each group's items
+          const groupContainerId = `group-container-${group.title.replace(/[^a-zA-Z0-9-_]/g, "-")}`;
+          initialHtml += `<div id="${groupContainerId}" class="group-content" data-group-title="${group.title}">`;
+          // Optional: Add H3 for group title if needed, or rely on TOC structure
+          // initialHtml += `<h3>${group.title}</h3>`;
+          if (group.items) {
+            group.items.forEach((item) => {
+              // Pre-create the container for each item's content
+              const itemContainerId = `container-${item.id}`;
+              // Add placeholder or leave empty until loaded
+              initialHtml += `<div class="fragment-container" id="${itemContainerId}" data-item-id="${item.id}"></div>`;
+            });
+          }
+          initialHtml += `</div>`; // Close group container
+        });
+      }
     });
     contentArea.innerHTML = initialHtml;
-    tocList.innerHTML = "<li>加载中...</li>";
+    tocList.innerHTML = "<li>加载中...</li>"; // Keep loading indicator for TOC
+    // --- 修改结束 ---
 
-    const allFragments = source.sections.flatMap((s) => s.fragments || []);
-    const fragmentPromises = allFragments.map(async (fragment) => {
-      const filePath = `${source.basePath}${fragment.id}.html`;
+    // --- 修改: 扁平化 items 并使用 item.file 加载 ---
+    const allItems = source.sections.flatMap((s) => s.groups || []).flatMap((g) => g.items || []);
+    const itemPromises = allItems.map(async (item) => {
+      // 使用 item.file 构建路径
+      const filePath = `${source.basePath}${item.file}.html`;
       try {
         const response = await fetch(filePath);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status} for ${filePath}`);
         }
         const fragmentHtml = await response.text();
-        return { id: fragment.id, html: fragmentHtml, success: true };
+        // Return the item itself along with HTML for context
+        return { item: item, html: fragmentHtml, success: true };
       } catch (error) {
         console.error(`加载片段失败: ${filePath}`, error);
-        return { id: fragment.id, html: `<p style="color: red;">加载失败: ${filePath}</p>`, success: false };
+        // Return item to identify which one failed
+        return { item: item, html: `<p style="color: red;">加载失败: ${item.name} (${filePath})</p>`, success: false };
       }
     });
 
-    const loadedResults = await Promise.all(fragmentPromises);
+    const loadedResults = await Promise.all(itemPromises);
 
-    source.sections.forEach((section) => {
-      const sectionContainer = contentArea.querySelector(`.section-content[data-section-title="${section.title}"]`);
-      if (!sectionContainer) return;
+    // --- 修改: 将加载的内容放入对应的 item container 中 ---
+    loadedResults.forEach((result) => {
+      const itemContainer = contentArea.querySelector(`#container-${result.item.id}`);
+      if (itemContainer) {
+        itemContainer.innerHTML = result.html;
 
-      let sectionHtmlContent = "";
-      const fragmentsInSection = loadedResults.filter((r) => section.fragments.some((f) => f.id === r.id));
-
-      fragmentsInSection.forEach((result) => {
-        const containerId = `container-${result.id}`;
-        sectionHtmlContent += `<div class="fragment-container" id="${containerId}">${result.html}</div>`;
-      });
-      sectionContainer.innerHTML = sectionHtmlContent;
-
-      fragmentsInSection.forEach((result) => {
+        // --- 修改: 使用 item.originalId 查找 caption 并添加页码/按钮 ---
         if (result.success) {
-          const caption = document.getElementById(result.id);
-          // --- 修改开始 ---
-          // Find the original fragment object to get the 'page' property
-          const originalFragment = allFragments.find((f) => f.id === result.id);
+          // Find the caption using the ORIGINAL ID stored in the item object
+          const caption = itemContainer.querySelector(`#${CSS.escape(result.item.originalId)}`);
 
-          if (caption && caption.tagName === "CAPTION" && originalFragment) {
-            const pageInfo = originalFragment.page; // Get the page string
+          if (caption && caption.tagName === "CAPTION") {
+            const pageInfo = result.item.page; // Get page from item
 
-            const pageSpan = document.createElement("span");
-            pageSpan.textContent = ` P${pageInfo}`; // Display page info
-            pageSpan.classList.add("page-info-span"); // Add class for styling
-            // Apply styles directly for simplicity, or use CSS with the class
-            pageSpan.style.color = "var(--base-text-secondary-color, #888888)";
-            pageSpan.style.fontSize = "0.9rem"; // Add space from caption text
-            pageSpan.style.cursor = "pointer"; // Indicate clickability
-            pageSpan.style.fontWeight = "normal"; // Ensure it's not bold like a button might be
-
-            pageSpan.onclick = () => copyTableColumns(result.id); // Keep the copy function
-
-            caption.appendChild(pageSpan);
-            // caption.style.position = "relative"; // Maybe not necessary for span
-            // --- 修改结束 ---
+            // Check if span already exists to prevent duplicates on potential re-renders
+            if (!caption.querySelector(".page-info-span")) {
+              const pageSpan = document.createElement("span");
+              pageSpan.textContent = ` P${pageInfo}`;
+              pageSpan.classList.add("page-info-span");
+              pageSpan.style.color = "var(--base-text-secondary-color, #888888)";
+              pageSpan.style.fontSize = "0.9rem";
+              pageSpan.style.cursor = "pointer";
+              pageSpan.style.fontWeight = "normal";
+              // Pass the ORIGINAL ID to the copy function
+              pageSpan.onclick = (e) => {
+                e.stopPropagation(); // Prevent potential parent clicks if needed
+                copyTableColumns(result.item.originalId);
+              };
+              caption.appendChild(pageSpan);
+            }
           } else if (caption) {
-            console.warn(`Found element with id ${result.id}, but it's not a caption or fragment data missing.`);
+            // Original ID found, but it's not a CAPTION
+            console.warn(`找到 ID 为 ${result.item.originalId} 的元素, 但它不是 CAPTION。`);
+          } else {
+            // Original ID not found within the loaded HTML for this item
+            // console.warn(`在为 ${result.item.name} 加载的 HTML 中找不到原始 ID: ${result.item.originalId}`);
           }
         }
-      });
+        // --- 修改结束 ---
+      } else {
+        console.error(`无法找到项目容器: #container-${result.item.id}`);
+      }
     });
+    // --- 修改结束 ---
 
+    // Generate TOC after content structure is potentially updated
     generateTOC(contentType);
   }
 
