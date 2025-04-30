@@ -712,6 +712,7 @@ span.highlighted.purple {
     align-items: center; /* 保持交叉轴居中，因为主轴是垂直的 */
     /* justify-content: center; /* 修正：改为 space-between 让标题居上，页码居下 */
     justify-content: space-between; /* 让标题和页码在垂直方向上分散对齐 */
+    max-height: 37.65em;
 }
 
 .vertical-caption-container .caption-text {
