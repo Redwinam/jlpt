@@ -643,6 +643,10 @@ span.highlighted.purple {
   color: var(--document-accent-color);
 }
 
+.document-wrapper tr.border-top td {
+  border-top: var(--document-hairline-width) solid var(--document-table-border-color);
+}
+
 /* 按钮样式 (可选, 可以根据你的设计调整) */
 .toggle-view-btn {
   margin-left: 10px;
@@ -726,7 +730,7 @@ span.highlighted.purple {
     display: inline-block; /* 使 transform 生效 */
     transform: rotate(90deg);
     /* 可能需要微调位置 */
-     margin: -0.5em 0.1em; /* 调整左右间距，因为旋转后会占用不同空间 */
+     margin: -0.5em 0; /* 调整左右间距，因为旋转后会占用不同空间 */
      vertical-align: baseline; /* 尝试对齐基线 */
 }
 
@@ -771,4 +775,88 @@ span.highlighted.purple {
 .table-layout-wrapper:not(.caption-vertical) table caption .page-info-span {
     /* 如果 page-info-span 是动态添加到 caption 的，确保它可见 */
     display: inline-block; /* 或 span 的默认值 */
+}
+
+/* Print specific styles */
+@media print {
+  /* Hide navigation and table of contents */
+  .top-nav,
+  #toc {
+    display: none !important; /* Use !important to ensure override */
+  }
+
+  /* Ensure main content takes full width */
+  .main-container {
+      padding: 0; /* Remove padding for print */
+  }
+
+  #content-area {
+      margin: 0; /* Remove margins for print */
+      width: 100%; /* Ensure content uses full width */
+  }
+
+  /* Page break control for tables */
+  .table-layout-wrapper {
+    page-break-before: always; /* Start each table wrapper on a new page */
+    page-break-inside: avoid; /* Try to keep the table content on one page */
+    margin-bottom: 0; /* Remove bottom margin for print */
+  }
+
+  /* Avoid breaking inside table rows or cells if possible */
+  tr, td, th {
+     page-break-inside: avoid;
+  }
+
+  /* Optional: Remove box shadows or other visual effects not needed for print */
+  .document-wrapper table {
+     box-shadow: none; /* Example */
+     border: 1px solid #ccc; /* Simplify border for print */
+     margin-bottom: 0; /* Remove bottom margin inside wrapper too */
+  }
+
+  /* Ensure backgrounds are printed if needed (browser setting dependent) */
+  body {
+     -webkit-print-color-adjust: exact;
+     print-color-adjust: exact;
+     background-color: #fff !important; /* Force white background */
+  }
+
+  /* Adjust font size or margins for better print layout if needed */
+  .document-wrapper {
+     font-size: 11pt; /* Adjust base font size for printing */
+     padding: 1.5cm; /* Add some margin around the content on the printed page */
+     width: auto; /* Let the print layout manage the width */
+  }
+
+  /* Hide buttons */
+  .toggle-view-btn,
+  #global-view-toggle,
+  #toggle-caption-layout {
+      display: none !important;
+  }
+
+  /* Ensure caption text is black for printing */
+  .document-wrapper caption {
+      color: #000 !important;
+  }
+
+  /* Ensure links are black and not underlined for print unless necessary */
+  a, a:visited {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+
+  .vertical-caption-container .caption-text .rotate-glyph {
+    position: relative;
+    left: 0.1em;
+  }
+
+  /* Optionally display URL for links */
+  /*
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #555;
+  }
+  */
 }
