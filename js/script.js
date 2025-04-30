@@ -108,6 +108,8 @@ const contentData = {
 
 // 全局状态变量，用于跟踪例句显示模式 ('split' 或 'merged')
 let globalExampleViewMode = "split";
+// 新增: 全局状态变量，用于跟踪标题布局模式 ('horizontal' 或 'vertical')
+let globalCaptionLayoutMode = "horizontal";
 
 // --- 修改: 设置单个表格的视图模式，保留 HTML ---
 function setTableViewMode(table, mode) {
@@ -195,7 +197,14 @@ function setTableViewMode(table, mode) {
       }
     }
   });
-  table.dataset.viewMode = mode; // 在表格上标记当前模式
+  // --- 重要更新: 不再直接在 table 上标记 viewMode, 而是在其包装器上标记 ---
+  // 获取或查找 table 的特定包装器，例如 table.closest('.table-layout-wrapper')
+  const wrapper = table.closest(".table-layout-wrapper");
+  if (wrapper) {
+    wrapper.dataset.viewMode = mode;
+  } else {
+    console.warn("Table does not have a .table-layout-wrapper parent.");
+  }
 }
 
 // --- 新增: 应用全局视图模式到所有表格 ---
@@ -220,15 +229,45 @@ function applyGlobalExampleView(mode) {
   }
 }
 
+// --- 新增: 应用全局标题布局模式到所有表格 ---
+function applyGlobalCaptionLayout(mode) {
+  const contentArea = document.getElementById("content-area");
+  const tableWrappers = contentArea.querySelectorAll(".table-layout-wrapper");
+
+  tableWrappers.forEach((wrapper) => {
+    if (mode === "vertical") {
+      wrapper.classList.add("caption-vertical");
+    } else {
+      wrapper.classList.remove("caption-vertical");
+    }
+  });
+
+  // 更新全局状态和按钮文本
+  globalCaptionLayoutMode = mode;
+  const toggleCaptionButton = document.getElementById("toggle-caption-layout");
+  if (toggleCaptionButton) {
+    toggleCaptionButton.textContent = mode === "vertical" ? "水平标题" : "垂直标题";
+  }
+}
+
 function copyTableColumns(captionId) {
-  const captionElement = document.getElementById(captionId);
-  if (!captionElement) {
-    console.error("找不到 Caption 元素: " + captionId);
-    return;
+  // --- 修改: 从新的垂直容器或原始 caption 获取标题 ---
+  // 首先尝试从垂直容器获取（如果布局是垂直）
+  const verticalCaptionContainer = document.querySelector(`.table-layout-wrapper[data-caption-id="${CSS.escape(captionId)}"] .vertical-caption-container .caption-text`);
+  let captionTitleRaw;
+  if (verticalCaptionContainer && window.getComputedStyle(verticalCaptionContainer.parentElement).display !== "none") {
+    captionTitleRaw = verticalCaptionContainer.textContent.trim() || "未知标题";
+  } else {
+    // 否则，回退到原始 caption （可能已隐藏）
+    const captionElement = document.getElementById(captionId);
+    if (captionElement) {
+      captionTitleRaw = captionElement.firstChild?.textContent?.trim() || "未知标题";
+    } else {
+      console.error("找不到 Caption 元素或其替代品: " + captionId);
+      return;
+    }
   }
 
-  // 获取 caption 的文本内容 (第一个文本节点，避免获取按钮文字)
-  const captionTitleRaw = captionElement.firstChild?.textContent?.trim() || "未知标题";
   const captionTitleProcessed = captionTitleRaw.replace(/\u3000/g, "\n"); // 将全角空格替换为换行符
   let textToCopy = captionTitleProcessed + "\n\n"; // 使用处理后的标题初始化，并添加换行
 
@@ -452,49 +491,77 @@ document.addEventListener("DOMContentLoaded", () => {
       if (itemContainer) {
         itemContainer.innerHTML = result.html;
 
-        // --- 修改: 使用 item.id 查找 caption 并添加页码/按钮 ---
-        if (result.success) {
-          // Find the caption using the NEW item ID
-          // Assumes the caption element's ID in the HTML has been updated to item.id
-          const caption = itemContainer.querySelector(`#${CSS.escape(result.item.id)}`);
-
-          if (caption && caption.tagName === "CAPTION") {
+        // --- 新增: 查找表格并创建包装器和垂直标题容器 ---
+        const tableElement = itemContainer.querySelector("table");
+        if (tableElement) {
+          const captionElement = tableElement.querySelector(`caption#${CSS.escape(result.item.id)}`);
+          if (captionElement) {
+            const captionText = captionElement.firstChild?.textContent?.trim() || "";
             const pageInfo = result.item.page; // Get page from item
+            const originalCaptionId = result.item.id; // Store original ID
 
-            // 添加页码 (如果不存在)
-            if (!caption.querySelector(".page-info-span")) {
-              const pageSpan = document.createElement("span");
-              pageSpan.textContent = ` P${pageInfo}`;
-              pageSpan.classList.add("page-info-span");
-              pageSpan.style.color = "var(--base-text-secondary-color, #888888)";
-              pageSpan.style.fontSize = "0.9rem";
-              pageSpan.style.cursor = "pointer";
-              pageSpan.style.fontWeight = "normal";
-              // Pass the NEW item ID to the copy function
-              pageSpan.onclick = (e) => {
-                e.stopPropagation();
-                copyTableColumns(result.item.id); // Use item.id here
-              };
+            // 1. 创建页码/复制按钮 Span
+            const pageSpan = document.createElement("span");
+            pageSpan.textContent = ` P${pageInfo}`;
+            pageSpan.classList.add("page-info-span");
+            pageSpan.style.color = "var(--base-text-secondary-color, #888888)";
+            pageSpan.style.fontSize = "0.9rem";
+            pageSpan.style.cursor = "pointer";
+            pageSpan.style.fontWeight = "normal";
+            pageSpan.onclick = (e) => {
+              e.stopPropagation();
+              copyTableColumns(originalCaptionId); // Use original item.id here
+            };
 
-              caption.appendChild(pageSpan);
-            }
-          } else if (caption) {
-            // Found element with item.id, but it's not a CAPTION
-            console.warn(`找到 ID 为 ${result.item.id} 的元素, 但它不是 CAPTION。`);
+            // 2. 创建垂直标题容器
+            const verticalContainer = document.createElement("div");
+            verticalContainer.classList.add("vertical-caption-container");
+
+            const captionTextDiv = document.createElement("div");
+            captionTextDiv.classList.add("caption-text");
+            captionTextDiv.textContent = captionText;
+
+            verticalContainer.appendChild(captionTextDiv);
+            verticalContainer.appendChild(pageSpan); // Add page span to vertical container
+
+            // 3. 创建外部包装器
+            const wrapper = document.createElement("div");
+            wrapper.classList.add("table-layout-wrapper");
+            // 将原始 caption ID 存储在 wrapper 上，以便 copyTableColumns 查找
+            wrapper.dataset.captionId = originalCaptionId;
+
+            // 4. DOM 操作：将 table 移入 wrapper，并将 verticalContainer 和 wrapper 插入
+            itemContainer.insertBefore(wrapper, tableElement);
+            wrapper.appendChild(verticalContainer); // Add vertical container first
+            wrapper.appendChild(tableElement); // Then add table
+
+            // 5. 处理原始 Caption：可以选择隐藏或移除，这里先隐藏
+            captionElement.style.display = "none"; // Initially hide original caption via style
+            // 如果选择移除： captionElement.remove();
+
+            // 6. (可选) 将 PageSpan 移到垂直容器后，从原始 Caption 移除 (如果之前添加过)
+            // captionElement.querySelector('.page-info-span')?.remove();
+            // 注意：由于 pageSpan 是新创建并直接加入 verticalContainer 的，
+            // 原始 caption 里不应该有它，所以不需要移除。
+            // 如果之前的代码确实在 captionElement.appendChild(pageSpan) 了，则需要下面这行：
+            // if (captionElement.contains(pageSpan)) { captionElement.removeChild(pageSpan); }
           } else {
-            // item.id not found within the loaded HTML for this item
-            // console.warn(`在为 ${result.item.name} 加载的 HTML 中找不到 ID: ${result.item.id}`);
+            console.warn(`在表格中找不到 Caption: #${CSS.escape(result.item.id)}`);
           }
+        } else {
+          // 如果 itemContainer 中没有 table，可能需要处理这种情况
+          // console.log(`Item container #${result.item.id} does not contain a table.`);
         }
-        // --- 修改结束 ---
+        // --- 新增结束 ---
       } else {
         console.error(`无法找到项目容器: #container-${result.item.id}`);
       }
     });
     // --- 修改结束 ---
 
-    // --- 新增: 内容加载并插入DOM后，应用当前的全局视图模式 ---
+    // --- 新增: 内容加载并插入DOM后，应用当前的全局视图模式 和 标题布局模式 ---
     applyGlobalExampleView(globalExampleViewMode);
+    applyGlobalCaptionLayout(globalCaptionLayoutMode); // 应用当前标题布局
 
     // Generate TOC after content structure is potentially updated
     generateTOC(contentType);
@@ -544,5 +611,15 @@ document.addEventListener("DOMContentLoaded", () => {
       applyGlobalExampleView(nextMode);
     });
   }
+
+  // --- 新增: 为标题布局切换按钮添加事件监听器 ---
+  const captionToggleButton = document.getElementById("toggle-caption-layout");
+  if (captionToggleButton) {
+    captionToggleButton.addEventListener("click", () => {
+      const nextLayoutMode = globalCaptionLayoutMode === "horizontal" ? "vertical" : "horizontal";
+      applyGlobalCaptionLayout(nextLayoutMode);
+    });
+  }
+
   // --- 新增结束 ---
 });
