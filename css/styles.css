@@ -610,7 +610,7 @@ span.highlighted.purple {
 
 
 .document-wrapper table td:nth-child(4).merged-example-cell {
-  width: 42em;
+  width: 45em;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
