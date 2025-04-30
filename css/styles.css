@@ -605,6 +605,30 @@ span.highlighted.purple {
 
 .document-wrapper table td:nth-child(4) {
   width: 36em;
+
+}
+
+
+.document-wrapper table td:nth-child(4).merged-example-cell {
+  width: 45em;
+  text-align: justify;
+  /* display: flex; */
+  /* justify-content: space-between; */
+}
+
+.merged-example-cell .original-sentence {
+  /* flex-grow: 1; 控制伸缩 */
+  /* font-weight: bold; */
+  float: left;
+}
+
+.merged-example-cell .translation {
+  /* flex-shrink: 0; 防止被压缩 */
+  /* align-self: flex-end; 底部对齐 */
+  float:right;
+  color: #777;
+  font-size: 0.9em;
+  margin-left: 5px;
 }
 
 .document-wrapper table td:nth-child(5) {

@@ -159,14 +159,19 @@ function setTableViewMode(table, mode) {
 
         // 使用存储的原始 HTML 进行合并
         const japaneseHTML = tdJapanese.dataset.originalHtml;
-        const chineseHTML = tdChinese.dataset.originalHtml;
+        let chineseHTML = tdChinese.dataset.originalHtml;
 
-        // 如果原始数据不存在，则降级为当前innerHTML（可能不准确，但比textContent好）
-        // const japaneseHTMLFallback = tdJapanese.dataset.originalHtml || tdJapanese.innerHTML;
-        // const chineseHTMLFallback = tdChinese.dataset.originalHtml || tdChinese.innerHTML;
+        // 移除中文翻译末尾的句号
+        if (typeof chineseHTML === "string") {
+          chineseHTML = chineseHTML.trim().replace(/。$/, "");
+        }
 
-        tdJapanese.innerHTML = `${japaneseHTML} / <span class="translation">${chineseHTML}</span>`;
+        // 将原句和翻译都包裹在 span 中
+        tdJapanese.innerHTML = `<span class="original-sentence">${japaneseHTML}</span> <span class="translation">${chineseHTML}</span>`;
         tdChinese.style.display = "none";
+        // 添加合并状态的 class
+        tdJapanese.classList.add("merged-example-cell");
+        tdChinese.classList.remove("merged-example-cell"); // 确保中文单元格没有这个 class
       } else {
         // mode === 'split'
         // 恢复原始 HTML
@@ -178,6 +183,8 @@ function setTableViewMode(table, mode) {
           tdChinese.innerHTML = tdChinese.dataset.originalHtml;
         }
         tdChinese.style.display = "";
+        // 移除合并状态的 class
+        tdJapanese.classList.remove("merged-example-cell");
       }
     }
   });
