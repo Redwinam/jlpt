@@ -517,9 +517,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const verticalContainer = document.createElement("div");
             verticalContainer.classList.add("vertical-caption-container");
 
+            // --- 修改: 处理括号旋转 ---
+            // 使用 innerHTML 而不是 textContent，并包裹括号
+            const captionTextHTML = captionText.replace(/\(/g, '<span class="rotate-glyph">(</span>').replace(/\)/g, '<span class="rotate-glyph">)</span>');
             const captionTextDiv = document.createElement("div");
             captionTextDiv.classList.add("caption-text");
-            captionTextDiv.textContent = captionText;
+            captionTextDiv.innerHTML = captionTextHTML; // 使用 innerHTML
+            // --- 修改结束 ---
 
             verticalContainer.appendChild(captionTextDiv);
             verticalContainer.appendChild(pageSpan); // Add page span to vertical container

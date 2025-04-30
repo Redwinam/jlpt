@@ -479,7 +479,7 @@ span.highlighted.purple {
   border-spacing: 0;
   border: var(--document-hairline-width) solid var(--document-table-border-color);
   border-radius: 0.33em;
-  margin-bottom: calc(var(--document-line-height-multiplier) * 1em);
+  /* margin-bottom: calc(var(--document-line-height-multiplier) * 1em); */
   page-break-inside: avoid;
 }
 .document-wrapper table[data-direction="2"] {
@@ -592,7 +592,7 @@ span.highlighted.purple {
 } */
 
 .document-wrapper table td:nth-child(1) {
-  width: 6em;
+  width: 3.6em;
 }
 
 .document-wrapper table td:nth-child(2) {
@@ -696,8 +696,8 @@ span.highlighted.purple {
     display: none; /* 默认不显示 */
     /* writing-mode: vertical-rl;  */
     text-orientation: upright; /* !!! 修正：让数字和字母保持直立 */
-    padding-right: 1em; /* 与表格的间距 */
-    border-right: 1px solid var(--document-table-border-color, #ccc); /* 可选：添加分隔线 */
+    /* padding-right: 1em;  */
+    /* border-right: 1px solid var(--document-table-border-color, #ccc);  */
     margin-right: 1em; /* 分隔线与表格的间距 */
     /* height: fit-content; /* 移除以允许拉伸 */
     flex-shrink: 0; /* 防止容器被压缩 */
@@ -719,6 +719,15 @@ span.highlighted.purple {
     white-space: nowrap; /* 防止标题换行 */
     /* 添加一些内边距可能更好看 */
     padding-top: 0.5em;
+}
+
+/* 新增：旋转括号样式 */
+.vertical-caption-container .caption-text .rotate-glyph {
+    display: inline-block; /* 使 transform 生效 */
+    transform: rotate(90deg);
+    /* 可能需要微调位置 */
+     margin: -0.5em 0.1em; /* 调整左右间距，因为旋转后会占用不同空间 */
+     vertical-align: baseline; /* 尝试对齐基线 */
 }
 
 .vertical-caption-container .page-info-span {
