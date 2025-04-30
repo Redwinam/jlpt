@@ -111,6 +111,13 @@ let globalExampleViewMode = "split";
 
 // --- 修改: 设置单个表格的视图模式，保留 HTML ---
 function setTableViewMode(table, mode) {
+  // 给 table 添加/移除状态类
+  if (mode === "merged") {
+    table.classList.add("table-merged-view");
+  } else {
+    table.classList.remove("table-merged-view");
+  }
+
   const theadRow = table.querySelector("thead tr");
   const tbodyRows = table.querySelectorAll("tbody tr");
   const headerCells = theadRow ? theadRow.querySelectorAll("th") : [];
@@ -128,13 +135,13 @@ function setTableViewMode(table, mode) {
       if (!thChinese.dataset.originalText) thChinese.dataset.originalText = thChinese.textContent;
 
       thJapanese.textContent = "例句";
-      thChinese.style.display = "none";
+      thChinese.classList.add("cell-collapsed");
     } else {
       // mode === 'split'
       // 恢复原始文本
       thJapanese.textContent = thJapanese.dataset.originalText || "日文例句";
       thChinese.textContent = thChinese.dataset.originalText || "中文翻译";
-      thChinese.style.display = "";
+      thChinese.classList.remove("cell-collapsed");
     }
   }
 
@@ -168,7 +175,7 @@ function setTableViewMode(table, mode) {
 
         // 将原句和翻译都包裹在 span 中
         tdJapanese.innerHTML = `<span class="original-sentence">${japaneseHTML}</span> <span class="translation">${chineseHTML}</span>`;
-        tdChinese.style.display = "none";
+        tdChinese.classList.add("cell-collapsed");
         // 添加合并状态的 class
         tdJapanese.classList.add("merged-example-cell");
         tdChinese.classList.remove("merged-example-cell"); // 确保中文单元格没有这个 class
@@ -182,7 +189,7 @@ function setTableViewMode(table, mode) {
         if (tdChinese.dataset.originalHtml) {
           tdChinese.innerHTML = tdChinese.dataset.originalHtml;
         }
-        tdChinese.style.display = "";
+        tdChinese.classList.remove("cell-collapsed");
         // 移除合并状态的 class
         tdJapanese.classList.remove("merged-example-cell");
       }

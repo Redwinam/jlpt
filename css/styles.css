@@ -657,3 +657,28 @@ span.highlighted.purple {
 .toggle-view-btn:hover {
     background-color: #ddd;
 }
+
+.document-wrapper td.cell-collapsed, .document-wrapper th.cell-collapsed {
+  display: none !important;
+  visibility: collapse !important;
+  /* 作为备选或补充，可以显式移除边框和内边距 */
+  padding: 0 !important;
+  border: none !important;
+  font-size: 0 !important; /* 进一步减小空间占用 */
+  line-height: 0 !important;
+}
+
+/* 当表格处于合并视图时，移除第四列（日文例句列）的右边框 */
+.table-merged-view th:nth-child(4),
+.table-merged-view td:nth-child(4) {
+  border-right: none !important; /* 使用 !important 确保覆盖默认样式 */
+}
+
+/* 保持隐藏第五列的规则 */
+.cell-collapsed {
+  visibility: collapse;
+  padding: 0 !important; /* 尝试进一步移除空间 */
+  border: none !important; /* 尝试进一步移除边框 */
+  font-size: 0 !important;
+  line-height: 0 !important;
+}
