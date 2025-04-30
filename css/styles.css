@@ -726,6 +726,13 @@ span.highlighted.purple {
     padding-top: 0.5em;
 }
 
+/* 新增：专门用于组合数字的样式 */
+.vertical-caption-container .caption-text .combine-digits {
+    text-combine-upright: all;
+    display: inline-block; /* 确保 text-combine-upright 生效 */
+    margin: 0.25em 0; /* 调整间距 */
+}
+
 /* 新增：旋转括号样式 */
 .vertical-caption-container .caption-text .rotate-glyph {
     display: inline-block; /* 使 transform 生效 */

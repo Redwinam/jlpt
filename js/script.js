@@ -517,12 +517,15 @@ document.addEventListener("DOMContentLoaded", () => {
             const verticalContainer = document.createElement("div");
             verticalContainer.classList.add("vertical-caption-container");
 
-            // --- 修改: 处理括号旋转 ---
-            // 使用 innerHTML 而不是 textContent，并包裹括号
-            const captionTextHTML = captionText.replace(/\(/g, '<span class="rotate-glyph">(</span>').replace(/\)/g, '<span class="rotate-glyph">)</span>');
+            // --- 修改: 处理括号旋转和数字组合 ---
+            // 1. 处理括号
+            let processedCaptionHTML = captionText.replace(/\(/g, '<span class="rotate-glyph">(</span>').replace(/\)/g, '<span class="rotate-glyph">)</span>');
+            // 2. 处理连续数字（例如 "第10回" 中的 "10"）
+            processedCaptionHTML = processedCaptionHTML.replace(/(\d{2,})/g, '<span class="combine-digits">$1</span>');
+
             const captionTextDiv = document.createElement("div");
             captionTextDiv.classList.add("caption-text");
-            captionTextDiv.innerHTML = captionTextHTML; // 使用 innerHTML
+            captionTextDiv.innerHTML = processedCaptionHTML; // 使用处理后的 HTML
             // --- 修改结束 ---
 
             verticalContainer.appendChild(captionTextDiv);
