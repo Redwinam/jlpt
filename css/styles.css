@@ -686,40 +686,47 @@ span.highlighted.purple {
 /* 表格布局包装器 */
 .table-layout-wrapper {
     display: flex;
-    align-items: flex-start; /* 垂直对齐方式，可根据需要调整 */
+    /* align-items: flex-start; /* 移除或改为 stretch 以匹配高度 */
+    align-items: stretch; /* 让子元素高度相等 */
     margin-bottom: calc(var(--document-line-height-multiplier) * 1em); /* 保持与原 table 相同的下边距 */
 }
 
 /* 垂直标题容器 (默认隐藏) */
 .vertical-caption-container {
     display: none; /* 默认不显示 */
-    writing-mode: vertical-rl; /* 竖排，从右到左 */
-    text-orientation: mixed; /* 或者 upright，根据需要选择文字方向 */
+    /* writing-mode: vertical-rl;  */
+    text-orientation: upright; /* !!! 修正：让数字和字母保持直立 */
     padding-right: 1em; /* 与表格的间距 */
     border-right: 1px solid var(--document-table-border-color, #ccc); /* 可选：添加分隔线 */
     margin-right: 1em; /* 分隔线与表格的间距 */
-    height: fit-content; /* 高度自适应内容 */
+    /* height: fit-content; /* 移除以允许拉伸 */
     flex-shrink: 0; /* 防止容器被压缩 */
     /* Flex 布局让内部元素上下排列 */
     display: flex; 
     flex-direction: column;
-    align-items: center; /* 水平居中（在垂直书写模式下是左右居中） */
-    justify-content: center; /* 垂直居中 （在垂直书写模式下是上下居中）*/
+    /* align-items: center; /* 修正：改为 stretch 或移除 */
+    align-items: center; /* 保持交叉轴居中，因为主轴是垂直的 */
+    /* justify-content: center; /* 修正：改为 space-between 让标题居上，页码居下 */
+    justify-content: space-between; /* 让标题和页码在垂直方向上分散对齐 */
 }
 
 .vertical-caption-container .caption-text {
     font-weight: 600;
     font-size: 1.2em; 
-    margin-bottom: 0.5em; /* 标题和页码间距 */
+    /* margin-bottom: 0.5em; /* 移除，由 justify-content 控制间距 */
     writing-mode: vertical-rl; /* 确保文字竖排 */
-    text-orientation: mixed; /* 或 upright */
+    text-orientation: upright; /* !!! 修正：让数字和字母保持直立 */
     white-space: nowrap; /* 防止标题换行 */
+    /* 添加一些内边距可能更好看 */
+    padding-top: 0.5em;
 }
 
 .vertical-caption-container .page-info-span {
     writing-mode: horizontal-tb; /* 页码和按钮保持水平 */
     display: inline-block; /* 确保能应用旋转等 */
-    margin-top: 0.5em; /* 增加与上面标题的间距 */
+    /* margin-top: 0.5em; /* 移除，由 justify-content 控制间距 */
+    /* 添加一些内边距可能更好看 */
+    padding-bottom: 0.5em;
     /* 可以添加 transform: rotate(90deg); 如果需要页码也旋转 */
 }
 
