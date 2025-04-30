@@ -614,3 +614,28 @@ span.highlighted.purple {
 .document-wrapper table td:nth-child(5) b {
   color: var(--document-accent-color);
 }
+
+.translation {
+  color: #777; /* 浅灰色 */
+  font-size: 0.9em; /* 稍小字体 */
+  margin-left: 5px; /* 与斜杠稍微分开 */
+}
+
+.translation b {
+  color: var(--document-accent-color);
+}
+
+/* 按钮样式 (可选, 可以根据你的设计调整) */
+.toggle-view-btn {
+  margin-left: 10px;
+  padding: 2px 6px;
+  font-size: 0.8em;
+  cursor: pointer;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  vertical-align: middle; /* 与页码对齐 */
+}
+.toggle-view-btn:hover {
+    background-color: #ddd;
+}

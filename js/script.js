@@ -106,6 +106,106 @@ const contentData = {
 };
 // --- 核心数据结构结束 ---
 
+// 全局状态变量，用于跟踪例句显示模式 ('split' 或 'merged')
+let globalExampleViewMode = "split";
+
+// --- 修改: 设置单个表格的视图模式，保留 HTML ---
+function setTableViewMode(table, mode) {
+  const theadRow = table.querySelector("thead tr");
+  const tbodyRows = table.querySelectorAll("tbody tr");
+  const headerCells = theadRow ? theadRow.querySelectorAll("th") : [];
+  // 假设日文例句是第4列(索引3)，中文翻译是第5列(索引4)
+  const japaneseColIndex = 3;
+  const chineseColIndex = 4;
+
+  // 更新表头
+  if (headerCells.length > chineseColIndex) {
+    const thJapanese = headerCells[japaneseColIndex];
+    const thChinese = headerCells[chineseColIndex];
+    if (mode === "merged") {
+      // 存储原始文本（如果尚未存储）
+      if (!thJapanese.dataset.originalText) thJapanese.dataset.originalText = thJapanese.textContent;
+      if (!thChinese.dataset.originalText) thChinese.dataset.originalText = thChinese.textContent;
+
+      thJapanese.textContent = "例句";
+      thChinese.style.display = "none";
+    } else {
+      // mode === 'split'
+      // 恢复原始文本
+      thJapanese.textContent = thJapanese.dataset.originalText || "日文例句";
+      thChinese.textContent = thChinese.dataset.originalText || "中文翻译";
+      thChinese.style.display = "";
+    }
+  }
+
+  // 更新表体
+  tbodyRows.forEach((row) => {
+    const cells = row.querySelectorAll("td");
+    if (cells.length > chineseColIndex) {
+      const tdJapanese = cells[japaneseColIndex];
+      const tdChinese = cells[chineseColIndex];
+
+      // 确保两个单元格都存在
+      if (!tdJapanese || !tdChinese) return;
+
+      if (mode === "merged") {
+        // 存储原始 HTML（如果尚未存储）
+        if (!tdJapanese.dataset.originalHtml) {
+          tdJapanese.dataset.originalHtml = tdJapanese.innerHTML;
+        }
+        if (!tdChinese.dataset.originalHtml) {
+          tdChinese.dataset.originalHtml = tdChinese.innerHTML;
+        }
+
+        // 使用存储的原始 HTML 进行合并
+        const japaneseHTML = tdJapanese.dataset.originalHtml;
+        const chineseHTML = tdChinese.dataset.originalHtml;
+
+        // 如果原始数据不存在，则降级为当前innerHTML（可能不准确，但比textContent好）
+        // const japaneseHTMLFallback = tdJapanese.dataset.originalHtml || tdJapanese.innerHTML;
+        // const chineseHTMLFallback = tdChinese.dataset.originalHtml || tdChinese.innerHTML;
+
+        tdJapanese.innerHTML = `${japaneseHTML} / <span class="translation">${chineseHTML}</span>`;
+        tdChinese.style.display = "none";
+      } else {
+        // mode === 'split'
+        // 恢复原始 HTML
+        if (tdJapanese.dataset.originalHtml) {
+          tdJapanese.innerHTML = tdJapanese.dataset.originalHtml;
+        }
+        // 恢复中文单元格的内容和显示
+        if (tdChinese.dataset.originalHtml) {
+          tdChinese.innerHTML = tdChinese.dataset.originalHtml;
+        }
+        tdChinese.style.display = "";
+      }
+    }
+  });
+  table.dataset.viewMode = mode; // 在表格上标记当前模式
+}
+
+// --- 新增: 应用全局视图模式到所有表格 ---
+function applyGlobalExampleView(mode) {
+  const contentArea = document.getElementById("content-area");
+  const tables = contentArea.querySelectorAll("table");
+  tables.forEach((table) => {
+    // 仅对包含日文和中文例句的表格应用切换逻辑
+    // 可以通过检查表头或特定类名来增加判断的鲁棒性
+    const headerCells = table.querySelectorAll("thead th");
+    if (headerCells.length > 4) {
+      // 简单检查列数
+      setTableViewMode(table, mode);
+    }
+  });
+
+  // 更新全局状态和按钮文本
+  globalExampleViewMode = mode;
+  const toggleButton = document.getElementById("global-view-toggle");
+  if (toggleButton) {
+    toggleButton.textContent = mode === "merged" ? "分开例句" : "合并例句";
+  }
+}
+
 function copyTableColumns(captionId) {
   const captionElement = document.getElementById(captionId);
   if (!captionElement) {
@@ -347,7 +447,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (caption && caption.tagName === "CAPTION") {
             const pageInfo = result.item.page; // Get page from item
 
-            // Check if span already exists to prevent duplicates
+            // 添加页码 (如果不存在)
             if (!caption.querySelector(".page-info-span")) {
               const pageSpan = document.createElement("span");
               pageSpan.textContent = ` P${pageInfo}`;
@@ -361,6 +461,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.stopPropagation();
                 copyTableColumns(result.item.id); // Use item.id here
               };
+
               caption.appendChild(pageSpan);
             }
           } else if (caption) {
@@ -377,6 +478,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
     // --- 修改结束 ---
+
+    // --- 新增: 内容加载并插入DOM后，应用当前的全局视图模式 ---
+    applyGlobalExampleView(globalExampleViewMode);
 
     // Generate TOC after content structure is potentially updated
     generateTOC(contentType);
@@ -417,4 +521,14 @@ document.addEventListener("DOMContentLoaded", () => {
     contentArea.innerHTML = "<h1>没有可加载的内容</h1>";
     tocList.innerHTML = "";
   }
+
+  // --- 新增: 为全局切换按钮添加事件监听器 ---
+  const globalToggleButton = document.getElementById("global-view-toggle");
+  if (globalToggleButton) {
+    globalToggleButton.addEventListener("click", () => {
+      const nextMode = globalExampleViewMode === "split" ? "merged" : "split";
+      applyGlobalExampleView(nextMode);
+    });
+  }
+  // --- 新增结束 ---
 });
